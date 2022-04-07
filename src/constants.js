@@ -6,7 +6,7 @@ import {scaleOrdinal} from 'd3-scale';
 // export const API_DOMAIN = 'https://api.covid19india.org';
 export const API_DOMAIN = 'https://api.covid19tracker.in';
 
-export const API_DOMAIN_MUMBAI = 'http://bowersbenjamin.pythonanywhere.com';
+export const API_DOMAIN_MUMBAI = 'https://bowersbenjamin.pythonanywhere.com';
 
 export const DATA_API_ROOT_MUMBAI_DISTRICT = `${API_DOMAIN_MUMBAI}/phase2_districts_overview`;
 export const DATA_API_ROOT_MUMBAI_WARD = `${API_DOMAIN_MUMBAI}/phase2_wards`;
