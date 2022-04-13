@@ -102,7 +102,7 @@ function StateMetaBottom({stateCode, data, timeseries}) {
     <>
       {reqData && (
         <>
-          <div className="StateMetaBottom population">
+          {/* <div className="StateMetaBottom population">
             <div className="meta-item population">
               <h3>{t('CCC Facilitiies')}</h3>
             </div>
@@ -118,7 +118,7 @@ function StateMetaBottom({stateCode, data, timeseries}) {
               title={t('Active CCC2 Facilities')}
               statistic={reqData.active_ccc2_facilities}
             />
-          </div>
+          </div> */}
           <div className="StateMetaBottom population">
             <div className="meta-item population">
               <h3>{t('Contact Tracing')}</h3>
@@ -136,7 +136,7 @@ function StateMetaBottom({stateCode, data, timeseries}) {
               statistic={reqData.contact_traced_low_risk}
             />
           </div>
-          <div className="StateMetaBottom population">
+          {/* <div className="StateMetaBottom population">
             <div className="meta-item population">
               <h3>{t('Containment Measures')}</h3>
             </div>
@@ -154,7 +154,7 @@ function StateMetaBottom({stateCode, data, timeseries}) {
               title={t('Containment Zones Active Slums Chawls')}
               statistic={reqData.containment_zones_active_slums_chawls}
             />
-          </div>
+          </div> */}
           <div className="StateMetaBottom population">
             <div className="meta-item population">
               <h3>{t('Quarantine Stats')}</h3>
@@ -173,11 +173,11 @@ function StateMetaBottom({stateCode, data, timeseries}) {
             </div>
           </div>
           <div className="StateMetaBottom">
-            <StateMetaCard
+            {/* <StateMetaCard
               className="confirmed"
               title={t('Bed Available DCHC DCH')}
               statistic={reqData.bed_available_dchc_dch}
-            />
+            /> */}
             <StateMetaCard
               className="confirmed"
               title={t('Bed Available DCHC DCH CCC2')}
@@ -198,11 +198,11 @@ function StateMetaBottom({stateCode, data, timeseries}) {
               title={t('Bed Available Ventilator')}
               statistic={reqData.bed_available_ventilator}
             />
-            <StateMetaCard
+            {/* <StateMetaCard
               className="confirmed"
               title={t('Bed Occupied DCHC DCH')}
               statistic={reqData.bed_occupied_dchc_dch}
-            />
+            /> */}
             <StateMetaCard
               className="confirmed"
               title={t('Bed Occupied DCHC DCH CCC2')}

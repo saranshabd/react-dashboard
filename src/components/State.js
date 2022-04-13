@@ -38,6 +38,7 @@ import {useSessionStorage} from 'react-use';
 import useSWR from 'swr';
 import StateMetaBottom from './StateMetaBottom';
 import Rechart from './Rechart';
+import StateMap from './StateMap';
 
 const DeltaBarGraph = lazy(() => retry(() => import('./DeltaBarGraph')));
 const Footer = lazy(() => retry(() => import('./Footer')));
@@ -284,9 +285,14 @@ function Mumbai() {
   // console.log(rechartActiveData);
   // console.log(rechartData);
 
-  //console.log(timeseries);
+  console.log(timeseries);
   // console.log(newSendingObj);
   console.log(timeseries2);
+  console.log(Object.keys(timeseries2['Mumbai']));
+  // All values of the wards
+  Object.keys(timeseries2['Mumbai']).forEach((e) => {
+    console.log(e);
+  });
   console.log(Object.keys(timeseries2['Mumbai']).length);
   console.log(timeseries2['Mumbai']['A'].length);
   // console.log(stateData);
@@ -385,78 +391,6 @@ function Mumbai() {
     let cases = 0;
     for (let j = 0; j < timeseries2['Mumbai']['A'].length; j++) {
       if (timeseries2['Mumbai']['A'][j][date]) {
-        // if (timeseries2['Mumbai']['A'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['A'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['B'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['B'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['C'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['C'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['D'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['D'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['E'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['E'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['FN'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['FN'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['FS'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['FS'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['GN'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['GN'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['GS'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['GS'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['HE'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['HE'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['HW'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['HW'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['KE'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['KE'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['KW'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['KW'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['L'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['L'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['ME'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['ME'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['MW'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['MW'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['N'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['N'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['PN'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['PN'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['PS'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['PS'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['RC'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['RC'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['RN'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['RN'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['RS'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['RS'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['S'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['S'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['T'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['T'][j][date]['total.sealedbuildings'] = 0;
         cases +=
           +timeseries2['Mumbai']['A'][j][date]['total.sealedbuildings'] +
           timeseries2['Mumbai']['B'][j][date]['total.sealedbuildings'] +
@@ -551,6 +485,19 @@ function Mumbai() {
           isMumbai={true}
         />
       </div>
+      <div className="State">
+        {data && (
+          <Suspense fallback={<div />}>
+            <StateMetaBottom
+              {...{
+                stateCode,
+                data,
+              }}
+              timeseries={timeseries?.[stateCode]?.dates}
+            />
+          </Suspense>
+        )}
+      </div>
 
       <div className="State">
         <div className="state-left">
@@ -579,154 +526,10 @@ function Mumbai() {
               ></MapExplorer>
             </Suspense>
           )}
-          {/* 
-          {data && (
-            <Suspense fallback={<div />}>
-              <StateMeta
-                {...{
-                  stateCode,
-                  data,
-                }}
-                timeseries={timeseries?.[stateCode]?.dates}
-              />
-            </Suspense>
-          )} */}
-          {/* <span ref={stateMetaElement} /> */}
         </div>
 
         <div className="state-right">
           <>
-            {/* <div className="district-bar">
-              <div
-                className={classnames('district-bar-top', {
-                  expanded: showAllDistricts,
-                })}
-              >
-                <div className="district-bar-left">
-                  <h2
-                    className={classnames(primaryStatistic, 'fadeInUp')}
-                    style={trail[0]}
-                  >
-                    {t('Top districts')}
-                  </h2>
-                  <div
-                    className={`districts fadeInUp ${
-                      showAllDistricts ? 'is-grid' : ''
-                    }`}
-                    style={
-                      showAllDistricts
-                        ? {
-                            gridTemplateRows: `repeat(${gridRowCount}, 2rem)`,
-                            ...trail[1],
-                          }
-                        : trail[1]
-                    }
-                  >
-                    {districts
-                      .filter((districtName) => districtName !== 'Unknown')
-                      .sort((a, b) => handleSort(a, b))
-                      .slice(0, showAllDistricts ? undefined : 5)
-                      .map((districtName) => {
-                        const total = getStatistic(
-                          stateData.districts[districtName],
-                          'total',
-                          primaryStatistic
-                        );
-                        const delta = getStatistic(
-                          stateData.districts[districtName],
-                          'delta',
-                          primaryStatistic
-                        );
-                        return (
-                          <div key={districtName} className="district">
-                            <h2>{formatNumber(total)}</h2>
-                            <h5>{t(districtName)}</h5>
-                            {primaryStatistic !== 'active' && (
-                              <div className="delta">
-                                <h6 className={primaryStatistic}>
-                                  {delta > 0
-                                    ? '\u2191' + formatNumber(delta)
-                                    : ''}
-                                </h6>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                  </div>
-                </div>
-
-                <div className="district-bar-right fadeInUp" style={trail[2]}>
-                  {timeseries &&
-                    (primaryStatistic === 'confirmed' ||
-                      primaryStatistic === 'deceased') && (
-                      <div className="happy-sign">
-                        {Object.keys(timeseries[stateCode]?.dates || {})
-                          .slice(-lookback)
-                          .every(
-                            (date) =>
-                              getStatistic(
-                                timeseries[stateCode].dates[date],
-                                'delta',
-                                primaryStatistic
-                              ) === 0
-                          ) && (
-                          <div
-                            className={`alert ${
-                              primaryStatistic === 'confirmed' ? 'is-green' : ''
-                            }`}
-                          >
-                            <SmileyIcon />
-                            <div className="alert-right">
-                              No new {primaryStatistic} cases in the past five
-                              days
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  <DeltaBarGraph
-                    timeseries={timeseries?.[stateCode]?.dates}
-                    statistic={primaryStatistic}
-                    {...{stateCode, lookback}}
-                    forceRender={!!timeseriesResponseError}
-                  />
-                </div>
-              </div>
-
-              <div className="district-bar-bottom">
-                {districts.length > 5 ? (
-                  <button
-                    className="button fadeInUp"
-                    onClick={toggleShowAllDistricts}
-                    style={trail[3]}
-                  >
-                    <span>
-                      {t(showAllDistricts ? 'View less' : 'View all')}
-                    </span>
-                  </button>
-                ) : (
-                  <div style={{height: '3.75rem', flexBasis: '15%'}} />
-                )}
-              </div>
-            </div> */}
-
-            {/* line of action we have to change timeseries format to the required format the see what we can do */}
-            {/* <h1>Chart JS Start</h1>
-            <LineGraph data={newLineGraphData} />
-            <h1>Chart JS END</h1>
-            */}
-            {/* <div className="State" style={{position: 'relative'}}>
-              <br />
-              <br />
-              <Level data={stateData} isMumbai={true} />
-              <Minigraphs
-                timeseries={timeseriesDatesnew}
-                {...{stateCode}}
-                forceRender={!!timeseriesResponseError}
-                isMumbai={true}
-              />
-            </div> */}
             <div className="Rechart">
               <Rechart title={'Active'} data={rechartData[0].dates} />
               <Rechart title={'Confirmed'} data={rechartConfirmedData} />
@@ -735,114 +538,16 @@ function Mumbai() {
               <Rechart title={'Recovered'} data={rechartRecoveredData} />
               <Rechart title={'Total Sealed Buildings'} data={rechartTSBData} />
               <Rechart title={'Total Sealed Floor'} data={rechartTSFData} />
-              {/* <Rechart
-                title={rechartData[2].type}
-                data={rechartData[2].dates}
-              />
-              <Rechart
-                title={rechartData[0].type}
-                data={rechartData[0].dates}
-              />
-              <Rechart
-                title={rechartData[2].type}
-                data={rechartData[2].dates}
-              /> */}
+
               <Rechart title={'Positive'} data={rechartData[0].dates} />
-              {/* {rechartData &&
-                rechartData.map((e) => {
-                  console.log(e);
-                  console.log(e.type);
-                  console.log(e.dates);
-                  <Rechart title={e.type} data={e.dates} />;
-                })} */}
             </div>
-
-            {/* <div className="State" style={{position: 'relative'}}>
-              <br />
-              <br />
-              <MapSwitcher
-                {...{mapStatistic, setMapStatistic}}
-                isMumbai={true}
-              />
-              <Level data={stateData} isMumbai={true} />
-              <Minigraphs
-                timeseries={timeseriesDates}
-                {...{stateCode}}
-                forceRender={!!timeseriesResponseError}
-                isMumbai={true}
-              />
-            </div> */}
-
-            {/* <LineChart /> */}
-
-            {/* {timeseries && (
-              <Suspense fallback={<div style={{height: '50rem'}} />}>
-                <TimeseriesExplorer
-                  stateCode={stateCode}
-                  {...{
-                    timeseries: newSendingObj,
-                    regionHighlighted,
-                    setRegionHighlighted,
-                    noRegionHighlightedDistrictData,
-                  }}
-                  forceRender={!!timeseriesResponseError}
-                />
-              </Suspense>
-            )} */}
-            {/* {timeseries && (
-              <Suspense fallback={<div style={{height: '50rem'}} />}>
-                <TimeseriesExplorerState
-                  stateCode={stateCode}
-                  {...{
-                    timeseries: newSendingObj,
-                    regionHighlighted,
-                    setRegionHighlighted,
-                    noRegionHighlightedDistrictData,
-                  }}
-                  forceRender={!!timeseriesResponseError}
-                />
-              </Suspense>
-            )} */}
-            {/* <div className="State">
-              <br />
-              <br />
-              <Level data={stateData} isMumbai={true} />
-              <Minigraphs
-                timeseries={timeseriesDates}
-                {...{stateCode}}
-                forceRender={!!timeseriesResponseError}
-                isMumbai={true}
-              />
-            </div>
-            <div>
-            </div> */}
-            {/* <Suspense fallback={<div />}>
-              <TimeseriesExplorer
-                {...{
-                  stateCode,
-                  timeseries,
-                  regionHighlighted,
-                  setRegionHighlighted,
-                  noRegionHighlightedDistrictData,
-                }}
-                forceRender={!!timeseriesResponseError}
-              />
-            </Suspense> */}
           </>
         </div>
       </div>
-      <div className="State">
-        {data && (
-          <Suspense fallback={<div />}>
-            <StateMetaBottom
-              {...{
-                stateCode,
-                data,
-              }}
-              timeseries={timeseries?.[stateCode]?.dates}
-            />
-          </Suspense>
-        )}
+      <div className="stateMap">
+        <h1>
+          <StateMap />
+        </h1>
       </div>
 
       <Footer />

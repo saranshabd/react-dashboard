@@ -676,12 +676,19 @@ h6 {
   width: 100%;
 }
 
+.stateMap {
+  margin-left: 9rem;
+  margin-right: 3rem;
+}
+
 .StateMetaBottom {
   align-self: center;
   text-align: center;
   display: grid;
-  grid-gap: 1rem;
-  grid-template-columns: repeat(7, 1fr);
+  grid-gap: 2rem;
+  grid-template-columns: repeat(4, 1fr);
+  padding-left: 10rem;
+  padding-right: 10rem;
   //margin-bottom: 3rem;
   width: calc(100% - 5rem);
 
@@ -764,6 +771,21 @@ h6 {
 
     &.confirmed {
       background: $cherry-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $cherry-mid;
+      }
+
+      h1 {
+        color: $cherry;
+      }
+    }
+
+    &.discharged {
+      background: $green-light;
 
       h3,
       h5,
