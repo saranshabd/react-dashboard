@@ -676,9 +676,21 @@ h6 {
   width: 100%;
 }
 
+.RechartNew {
+  align-self: center;
+  text-align: center;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(4, 1fr);
+  //margin-bottom: 3rem;
+  width: 100%;
+}
+
 .stateMap {
   margin-left: 9rem;
   margin-right: 3rem;
+  padding-top: 5rem;
+  padding-bottom: 2rem;
 }
 
 .StateMetaBottom {

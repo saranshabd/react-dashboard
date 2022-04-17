@@ -18,8 +18,22 @@ function Rechart({title, data}) {
           <ResponsiveContainer width="100%" aspect={1}>
             <LineChart data={data}>
               {/* <CartesianGrid /> */}
-              <XAxis dataKey="date" interval={'preserveStartEnd'} />
-              <YAxis orientation="right"></YAxis>
+              <XAxis
+                dataKey="date"
+                style={{
+                  fontSize: '1rem',
+                  fontFamily: 'Times New Roman',
+                }}
+                interval={'preserveStartEnd'}
+                minTickGap={50}
+              />
+              <YAxis
+                orientation="right"
+                style={{
+                  fontSize: '1rem',
+                  fontFamily: 'Times New Roman',
+                }}
+              ></YAxis>
               <Legend />
               <Tooltip />
               {/* <Line dataKey="student" stroke="black" activeDot={{r: 8}} /> */}

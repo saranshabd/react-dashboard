@@ -285,10 +285,11 @@ function Mumbai() {
   // console.log(rechartActiveData);
   // console.log(rechartData);
 
-  console.log(timeseries);
-  // console.log(newSendingObj);
-  console.log(timeseries2);
-  console.log(Object.keys(timeseries2['Mumbai']));
+  // console.log(timeseries);
+  // // console.log(newSendingObj);
+  // console.log(timeseries2);
+  // console.log(Object.keys(timeseries2['Mumbai']));
+  const wards = Object.keys(timeseries2['Mumbai']);
   // All values of the wards
   Object.keys(timeseries2['Mumbai']).forEach((e) => {
     console.log(e);
@@ -345,6 +346,8 @@ function Mumbai() {
     }
     rechartConfirmedData.push({date: date, cases: cases});
   }
+
+  console.log(rechartConfirmedData);
 
   // Data for Recovered
   const rechartRecoveredData = [];
@@ -416,7 +419,7 @@ function Mumbai() {
           timeseries2['Mumbai']['RS'][j][date]['total.sealedbuildings'] +
           timeseries2['Mumbai']['S'][j][date]['total.sealedbuildings'] +
           timeseries2['Mumbai']['T'][j][date]['total.sealedbuildings'];
-        console.log(cases);
+
         break;
       }
     }
@@ -493,13 +496,13 @@ function Mumbai() {
                 stateCode,
                 data,
               }}
-              timeseries={timeseries?.[stateCode]?.dates}
+              timeseries={timeseries}
             />
           </Suspense>
         )}
       </div>
 
-      <div className="State">
+      {/* <div className="State">
         <div className="state-left">
           <StateHeader data={stateData} stateCode={stateCode} />
 
@@ -534,19 +537,21 @@ function Mumbai() {
               <Rechart title={'Active'} data={rechartData[0].dates} />
               <Rechart title={'Confirmed'} data={rechartConfirmedData} />
               <Rechart title={'Deseased'} data={rechartData[1].dates} />
-
               <Rechart title={'Recovered'} data={rechartRecoveredData} />
               <Rechart title={'Total Sealed Buildings'} data={rechartTSBData} />
               <Rechart title={'Total Sealed Floor'} data={rechartTSFData} />
-
               <Rechart title={'Positive'} data={rechartData[0].dates} />
             </div>
           </>
         </div>
-      </div>
+      </div> */}
       <div className="stateMap">
         <h1>
-          <StateMap />
+          <StateMap
+            wards={wards}
+            data={timeseries2['Mumbai']}
+            allDates={allDates}
+          />
         </h1>
       </div>
 
