@@ -201,47 +201,22 @@ function Mumbai() {
     regionHighlighted.districtName !== UNKNOWN_DISTRICT_KEY &&
     noDistrictData;
 
-  // const districts = Object.keys(
-  //   ((!noDistrictData || !statisticConfig.hasPrimary) &&
-  //     stateData?.districts) ||
-  //     {}
-  // );
-
   const timeseriesDates = {};
-  for (let i = 0; i < timeseries.length; ++i) {
-    timeseriesDates[timeseries[i]['date']] = {
-      active: timeseries[i]['total.active'],
-      positive: timeseries[i]['delta.positive'],
-      deaths: timeseries[i]['delta.deaths'],
-      discharged: timeseries[i]['delta.discharged'],
-      critical: timeseries[i]['active.critical'],
-      stable_symptomatic: timeseries[i]['active.symptomatic'],
-      stable_asymptomatic: timeseries[i]['active.asymptomatic'],
+  const timeseriesDate = Object.keys(timeseries);
+  console.log(timeseriesDate);
+  for (let i = 0; i < Object.keys(timeseries).length; ++i) {
+    const date = timeseriesDate[i];
+
+    timeseriesDates[date] = {
+      active: timeseries[timeseriesDate[i]]['total.active'],
+      positive: timeseries[timeseriesDate[i]]['delta.positive'],
+      deaths: timeseries[timeseriesDate[i]]['delta.deaths'],
+      discharged: timeseries[timeseriesDate[i]]['delta.discharged'],
+      critical: timeseries[timeseriesDate[i]]['active.critical'],
+      stable_symptomatic: timeseries[timeseriesDate[i]]['active.symptomatic'],
+      stable_asymptomatic: timeseries[timeseriesDate[i]]['active.asymptomatic'],
     };
   }
-
-  const timeseriesDatesnew = {};
-  for (let i = 0; i < timeseries.length; ++i) {
-    timeseriesDatesnew[timeseries[i]['date']] = {};
-  }
-
-  // console.log(timeseriesDates);
-  // console.log(timeseries);
-
-  const newDates = {};
-  for (let i = 0; i < timeseries.length; ++i) {
-    newDates[timeseries[i]['date']] = {
-      delta: {
-        confirmed: timeseries[i]['total.active'],
-        critical: timeseries[i]['total.active'],
-        deceased: timeseries[i]['delta.deaths'],
-        other: timeseries[i]['delta.tests'],
-        recovered: timeseries[i]['delta.discharged'],
-        tested: timeseries[i]['delta.tests'],
-      },
-    };
-  }
-  const newSendingObj = {MU: {dates: newDates}};
 
   // Data which will be send to Rechart
   const rechartData = [];
@@ -269,6 +244,7 @@ function Mumbai() {
   }
 
   rechartData.push({type: 'deceased', dates: rechartDeceasedData});
+  console.log(rechartDeceasedData);
 
   // Data for positive
   const rechartPositiveData = [];
@@ -347,6 +323,45 @@ function Mumbai() {
     rechartConfirmedData.push({date: date, cases: cases});
   }
 
+  // Data for confirmed
+  const deceasedData = [];
+  // console.log(rechartConfirmedData);
+  for (let i = 0; i < timeseries2['Mumbai']['A'].length; i++) {
+    const date = allDates[i].date;
+    let cases = 0;
+    for (let j = 0; j < timeseries2['Mumbai']['A'].length; j++) {
+      if (timeseries2['Mumbai']['A'][j][date]) {
+        cases +=
+          +timeseries2['Mumbai']['A'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['B'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['C'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['D'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['E'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['FN'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['FS'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['GN'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['GS'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['HE'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['HW'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['KE'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['KW'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['L'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['ME'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['MW'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['N'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['PN'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['PS'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['RC'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['RN'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['RS'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['S'][j][date]['delta.deceased'] +
+          timeseries2['Mumbai']['T'][j][date]['delta.deceased'];
+        break;
+      }
+    }
+    deceasedData.push({date: date, cases: cases});
+  }
+
   console.log(rechartConfirmedData);
 
   // Data for Recovered
@@ -388,42 +403,42 @@ function Mumbai() {
   }
 
   // Data for Total Sealed Building
-  const rechartTSBData = [];
+  const meanRTData = [];
   for (let i = 0; i < timeseries2['Mumbai']['A'].length; i++) {
     const date = allDates[i].date;
     let cases = 0;
     for (let j = 0; j < timeseries2['Mumbai']['A'].length; j++) {
       if (timeseries2['Mumbai']['A'][j][date]) {
         cases +=
-          +timeseries2['Mumbai']['A'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['B'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['C'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['D'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['E'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['FN'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['FS'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['GN'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['GS'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['HE'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['HW'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['KE'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['KW'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['L'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['ME'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['MW'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['N'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['PN'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['PS'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['RC'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['RN'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['RS'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['S'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['T'][j][date]['total.sealedbuildings'];
+          +timeseries2['Mumbai']['A'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['B'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['C'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['D'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['E'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['FN'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['FS'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['GN'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['GS'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['HE'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['HW'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['KE'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['KW'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['L'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['ME'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['MW'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['N'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['PN'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['PS'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['RC'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['RN'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['RS'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['S'][j][date]['mean.RT'] +
+          timeseries2['Mumbai']['T'][j][date]['mean.RT'];
 
         break;
       }
     }
-    rechartTSBData.push({date: date, cases: cases});
+    meanRTData.push({date: date, cases: cases});
   }
 
   // Data for Total Sealed Building
@@ -502,56 +517,22 @@ function Mumbai() {
         )}
       </div>
 
-      {/* <div className="State">
-        <div className="state-left">
-          <StateHeader data={stateData} stateCode={stateCode} />
-
-          {stateData?.total?.vaccinated1 && (
-            <VaccinationHeader data={stateData} />
-          )}
-
-          {data && (
-            <Suspense fallback={<div style={{minHeight: '50rem'}} />}>
-              <MapExplorer
-                {...{
-                  stateCode,
-                  data,
-                  regionHighlighted,
-                  setRegionHighlighted,
-                  mapStatistic,
-                  setMapStatistic,
-                  lastDataDate,
-                  delta7Mode,
-                  setDelta7Mode,
-                  noRegionHighlightedDistrictData,
-                  noDistrictData,
-                }}
-              ></MapExplorer>
-            </Suspense>
-          )}
-        </div>
-
-        <div className="state-right">
-          <>
-            <div className="Rechart">
-              <Rechart title={'Active'} data={rechartData[0].dates} />
-              <Rechart title={'Confirmed'} data={rechartConfirmedData} />
-              <Rechart title={'Deseased'} data={rechartData[1].dates} />
-              <Rechart title={'Recovered'} data={rechartRecoveredData} />
-              <Rechart title={'Total Sealed Buildings'} data={rechartTSBData} />
-              <Rechart title={'Total Sealed Floor'} data={rechartTSFData} />
-              <Rechart title={'Positive'} data={rechartData[0].dates} />
-            </div>
-          </>
-        </div>
-      </div> */}
       <div className="stateMap">
         <h1>
-          <StateMap
-            wards={wards}
-            data={timeseries2['Mumbai']}
-            allDates={allDates}
-          />
+          {rechartConfirmedData &&
+            rechartRecoveredData &&
+            deceasedData &&
+            meanRTData && (
+              <StateMap
+                wards={wards}
+                data={timeseries2['Mumbai']}
+                allDates={allDates}
+                allConfirmedData={rechartConfirmedData}
+                allRecoveredData={rechartRecoveredData}
+                allDeceasedData={deceasedData}
+                allMeanRT={meanRTData}
+              />
+            )}
         </h1>
       </div>
 

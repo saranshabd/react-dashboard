@@ -224,12 +224,10 @@ export const PRIMARY_STATISTICS = [
 
 export const MUMBAI_PRIMARY_STATISTICS = [
   'active',
-  'positive',
-  'deaths',
-  'discharged',
   'critical',
   'stable_symptomatic',
   'stable_asymptomatic',
+  'deaths',
 ];
 
 export const LEVEL_STATISTICS = [...PRIMARY_STATISTICS];

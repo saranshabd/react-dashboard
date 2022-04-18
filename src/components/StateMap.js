@@ -2,7 +2,15 @@ import {FormControl, Select, MenuItem} from '@material-ui/core';
 import React, {useState} from 'react';
 import Rechart from './Rechart';
 
-function StateMap({wards, data, allDates}) {
+function StateMap({
+  wards,
+  data,
+  allDates,
+  allConfirmedData,
+  allRecoveredData,
+  allDeceasedData,
+  allMeanRT,
+}) {
   //const [wards, setWards] = useState(['a', 'b', 'c']);
   console.log(data);
   console.log(allDates);
@@ -10,10 +18,13 @@ function StateMap({wards, data, allDates}) {
   console.log(w);
   const [ward, setWard] = useState('all');
   // let ward = 'all';
-  const [confirmed, setConfirmed] = useState([]);
-  const [deceased, setDeceased] = useState([]);
-  const [recovered, setRecovered] = useState([]);
-  const [rt, setRT] = useState([]);
+  const [confirmed, setConfirmed] = useState(allConfirmedData);
+  const [deceased, setDeceased] = useState(allDeceasedData);
+  const [recovered, setRecovered] = useState(allRecoveredData);
+  const [rt, setRT] = useState(allMeanRT);
+
+  console.log(allRecoveredData);
+  console.log(allDeceasedData);
 
   const dates = Object.keys(data['A']);
   console.log(dates);
@@ -229,7 +240,7 @@ function StateMap({wards, data, allDates}) {
 
     e.preventDefault();
   };
-
+  // onChangeWard('all');
   return (
     <>
       <div className="stateMapHeader">
@@ -237,9 +248,8 @@ function StateMap({wards, data, allDates}) {
           <h1>Ward-Wise Stats</h1>
         </div>
         <div>
-          <FormControl>
+          <FormControl variant="standard" sx={{m: 1, minWidth: 120}}>
             <Select value={ward} onChange={onChangeWard}>
-              {/* default value */}
               <MenuItem value={'all'}>All</MenuItem>
               {w.map((ele, index) => (
                 <MenuItem value={ele}>{ele}</MenuItem>
