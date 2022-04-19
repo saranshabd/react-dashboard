@@ -215,22 +215,11 @@ function Mumbai() {
 
   rechartData.push({type: 'positive', dates: rechartPositiveData});
 
-  // console.log(rechartActiveData);
-  // console.log(rechartData);
-
-  // console.log(timeseries);
-  // // console.log(newSendingObj);
-  // console.log(timeseries2);
-  // console.log(Object.keys(timeseries2['Mumbai']));
   const wards = Object.keys(timeseries2['Mumbai']);
   // All values of the wards
   Object.keys(timeseries2['Mumbai']).forEach((e) => {
     console.log(e);
   });
-  console.log(Object.keys(timeseries2['Mumbai']).length);
-  console.log(timeseries2['Mumbai']['A'].length);
-  // console.log(stateData);
-  //console.log(Object.keys(timeseries2['Mumbai']['A'][0]));
 
   // All dates in the timeseries2
   const allDates = [];
@@ -282,7 +271,6 @@ function Mumbai() {
 
   // Data for confirmed
   const deceasedData = [];
-  // console.log(rechartConfirmedData);
   for (let i = 0; i < timeseries2['Mumbai']['A'].length; i++) {
     const date = allDates[i].date;
     let cases = 0;
@@ -442,33 +430,28 @@ function Mumbai() {
   for (let i = 0; i < Object.keys(stateData).length; i++) {
     totalActive += stateData[allDatesTimeseries[i]]['total.active'];
   }
-  console.log(totalActive);
 
   let totalCritical = 0;
   for (let i = 0; i < Object.keys(stateData).length; i++) {
     totalCritical += stateData[allDatesTimeseries[i]]['active.critical'];
   }
-  console.log(totalCritical);
 
   let totalStableSymptomatic = 0;
   for (let i = 0; i < Object.keys(stateData).length; i++) {
     totalStableSymptomatic +=
       stateData[allDatesTimeseries[i]]['active.symptomatic'];
   }
-  console.log(totalStableSymptomatic);
 
   let totalStableAsymptomatic = 0;
   for (let i = 0; i < Object.keys(stateData).length; i++) {
     totalStableAsymptomatic +=
       stateData[allDatesTimeseries[i]]['active.asymptomatic'];
   }
-  console.log(totalStableAsymptomatic);
 
   let totalDeaths = 0;
   for (let i = 0; i < Object.keys(stateData).length; i++) {
     totalDeaths += stateData[allDatesTimeseries[i]]['delta.deaths'];
   }
-  console.log(totalDeaths);
 
   return (
     <>
@@ -499,6 +482,7 @@ function Mumbai() {
               totalStableSymptomatic={totalStableSymptomatic}
               totalStableAsymptomatic={totalStableAsymptomatic}
               totalDeaths={totalDeaths}
+              fromState={true}
             />
           )}
         <Minigraphs

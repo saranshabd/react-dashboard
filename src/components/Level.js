@@ -22,6 +22,7 @@ function PureLevelItem({
   totalStableSymptomatic,
   totalStableAsymptomatic,
   totalDeaths,
+  fromState,
 }) {
   const {t} = useTranslation();
   const spring = useSpring({
@@ -65,15 +66,25 @@ function PureLevelItem({
         )}
       </animated.h4>
       <animated.h1>
-        {statisticConfig.displayName == 'active'
-          ? numberWithCommas(totalActive)
-          : statisticConfig.displayName == 'critical'
-          ? numberWithCommas(totalCritical)
-          : statisticConfig.displayName == 'stable symptomatic'
-          ? numberWithCommas(totalStableSymptomatic)
-          : statisticConfig.displayName == 'stable asymptomatic'
-          ? numberWithCommas(totalStableAsymptomatic)
-          : numberWithCommas(totalDeaths)}
+        {fromState
+          ? statisticConfig.displayName == 'active'
+            ? numberWithCommas(totalActive)
+            : statisticConfig.displayName == 'critical'
+            ? numberWithCommas(totalCritical)
+            : statisticConfig.displayName == 'stable symptomatic'
+            ? numberWithCommas(totalStableSymptomatic)
+            : statisticConfig.displayName == 'stable asymptomatic'
+            ? numberWithCommas(totalStableAsymptomatic)
+            : numberWithCommas(totalDeaths)
+          : spring.total.to((total) =>
+              formatNumber(
+                total,
+                statisticConfig.format !== 'short'
+                  ? statisticConfig.format
+                  : 'long',
+                statistic
+              )
+            )}
       </animated.h1>
     </>
   );
@@ -89,7 +100,9 @@ function Level({
   totalStableSymptomatic,
   totalStableAsymptomatic,
   totalDeaths,
+  fromState,
 }) {
+  console.log(fromState);
   const levelStatistics = isMumbai ? MUMBAI_LEVEL_STATISTICS : LEVEL_STATISTICS;
   console.log(levelStatistics);
 
@@ -155,6 +168,7 @@ function Level({
             totalStableSymptomatic={totalStableSymptomatic}
             totalStableAsymptomatic={totalStableAsymptomatic}
             totalDeaths={totalDeaths}
+            fromState={fromState}
           />
         </animated.div>
       ))}
