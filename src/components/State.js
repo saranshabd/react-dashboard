@@ -102,47 +102,8 @@ function Mumbai() {
 
   const stateData = data;
 
-  // const toggleShowAllDistricts = () => {
-  //   setShowAllDistricts(!showAllDistricts);
-  // };
-
-  // const handleSort = (districtNameA, districtNameB) => {
-  //   const districtA = stateData.districts[districtNameA];
-  //   const districtB = stateData.districts[districtNameB];
-  //   return (
-  //     getStatistic(districtB, 'total', mapStatistic) -
-  //     getStatistic(districtA, 'total', mapStatistic)
-  //   );
-  // };
-
-  // const gridRowCount = useMemo(() => {
-  //   if (!stateData) return;
-  //   const gridColumnCount = window.innerWidth >= 540 ? 3 : 2;
-  //   const districtCount = stateData?.districts
-  //     ? Object.keys(stateData.districts).filter(
-  //         (districtName) => districtName !== 'Unknown'
-  //       ).length
-  //     : 0;
-  //   const gridRowCount = Math.ceil(districtCount / gridColumnCount);
-  //   return gridRowCount;
-  // }, [stateData]);
-
   const stateMetaElement = useRef();
   const isStateMetaVisible = useIsVisible(stateMetaElement);
-
-  // const trail = useMemo(() => {
-  //   const styles = [];
-
-  //   [0, 0, 0, 0].map((element, index) => {
-  //     styles.push({
-  //       animationDelay: `${index * 250}ms`,
-  //     });
-  //     return null;
-  //   });
-  //   return styles;
-  // }, []);
-
-  // const lookback = showAllDistricts ? (window.innerWidth >= 540 ? 10 : 8) : 6;
 
   const lastDataDate = useMemo(() => {
     const updatedDates = [
@@ -156,10 +117,6 @@ function Mumbai() {
         })
       : null;
   }, [stateData]);
-
-  // const primaryStatistic = MUMBAI_MAP_STATISTICS.includes(mapStatistic)
-  //   ? mapStatistic
-  //   : 'confirmed';
 
   const noDistrictData = useMemo(() => {
     // Heuristic: All cases are in Unknown
@@ -479,6 +436,40 @@ function Mumbai() {
     rechartTSFData.push({date: date, cases: cases});
   }
 
+  const allDatesTimeseries = Object.keys(timeseries);
+
+  let totalActive = 0;
+  for (let i = 0; i < Object.keys(stateData).length; i++) {
+    totalActive += stateData[allDatesTimeseries[i]]['total.active'];
+  }
+  console.log(totalActive);
+
+  let totalCritical = 0;
+  for (let i = 0; i < Object.keys(stateData).length; i++) {
+    totalCritical += stateData[allDatesTimeseries[i]]['active.critical'];
+  }
+  console.log(totalCritical);
+
+  let totalStableSymptomatic = 0;
+  for (let i = 0; i < Object.keys(stateData).length; i++) {
+    totalStableSymptomatic +=
+      stateData[allDatesTimeseries[i]]['active.symptomatic'];
+  }
+  console.log(totalStableSymptomatic);
+
+  let totalStableAsymptomatic = 0;
+  for (let i = 0; i < Object.keys(stateData).length; i++) {
+    totalStableAsymptomatic +=
+      stateData[allDatesTimeseries[i]]['active.asymptomatic'];
+  }
+  console.log(totalStableAsymptomatic);
+
+  let totalDeaths = 0;
+  for (let i = 0; i < Object.keys(stateData).length; i++) {
+    totalDeaths += stateData[allDatesTimeseries[i]]['delta.deaths'];
+  }
+  console.log(totalDeaths);
+
   return (
     <>
       <Helmet>
@@ -495,7 +486,21 @@ function Mumbai() {
         <br />
         <br />
         <MapSwitcher {...{mapStatistic, setMapStatistic}} isMumbai={true} />
-        <Level data={stateData} isMumbai={true} />
+        {totalActive &&
+          totalCritical &&
+          totalStableSymptomatic &&
+          totalStableAsymptomatic &&
+          totalDeaths && (
+            <Level
+              data={stateData}
+              isMumbai={true}
+              totalActive={totalActive}
+              totalCritical={totalCritical}
+              totalStableSymptomatic={totalStableSymptomatic}
+              totalStableAsymptomatic={totalStableAsymptomatic}
+              totalDeaths={totalDeaths}
+            />
+          )}
         <Minigraphs
           timeseries={timeseriesDates}
           {...{stateCode}}
@@ -519,7 +524,10 @@ function Mumbai() {
 
       <div className="stateMap">
         <h1>
-          {rechartConfirmedData &&
+          {allDates &&
+            wards &&
+            timeseries2 &&
+            rechartConfirmedData &&
             rechartRecoveredData &&
             deceasedData &&
             meanRTData && (
