@@ -11,31 +11,18 @@ function StateMap({
   allDeceasedData,
   allMeanRT,
 }) {
-  //const [wards, setWards] = useState(['a', 'b', 'c']);
-  console.log(data);
-  console.log(allDates);
   const w = wards;
-  console.log(w);
   const [ward, setWard] = useState('all');
-  // let ward = 'all';
   const [confirmed, setConfirmed] = useState(allConfirmedData);
   const [deceased, setDeceased] = useState(allDeceasedData);
   const [recovered, setRecovered] = useState(allRecoveredData);
   const [rt, setRT] = useState(allMeanRT);
 
-  console.log(allRecoveredData);
-  console.log(allDeceasedData);
-
   const dates = Object.keys(data['A']);
-  console.log(dates);
 
   const onChangeWard = (e) => {
     const val = e.target.value;
-    // ward = val;
     setWard(val);
-    console.log(val);
-    // console.log(data[val]);
-    // console.log(data[val].length);
 
     if (val === 'all') {
       console.log(data);
@@ -249,12 +236,27 @@ function StateMap({
         </div>
         <div>
           <FormControl variant="standard" sx={{m: 1, minWidth: 120}}>
-            <Select value={ward} onChange={onChangeWard}>
-              <MenuItem value={'all'}>All</MenuItem>
-              {w.map((ele, index) => (
-                <MenuItem value={ele}>{ele}</MenuItem>
-              ))}
-            </Select>
+            <div className="dropdown">
+              <Select
+                // autoWidth={true}
+                MenuProps={{
+                  sx: {
+                    '&& .MuiInputBase-input': {
+                      color: 'blue',
+                    },
+                  },
+                }}
+                variant="outlined"
+                value={ward}
+                onChange={onChangeWard}
+                sx={{m: 1, minWidth: 500}}
+              >
+                <MenuItem value={'all'}>All</MenuItem>
+                {w.map((ele, index) => (
+                  <MenuItem value={ele}>{ele}</MenuItem>
+                ))}
+              </Select>
+            </div>
           </FormControl>
           <div className="RechartNew">
             <Rechart title={'Confirmed'} data={confirmed} />

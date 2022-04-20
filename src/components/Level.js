@@ -102,9 +102,7 @@ function Level({
   totalDeaths,
   fromState,
 }) {
-  console.log(fromState);
   const levelStatistics = isMumbai ? MUMBAI_LEVEL_STATISTICS : LEVEL_STATISTICS;
-  console.log(levelStatistics);
 
   const trail = useMemo(() => {
     const styles = [];

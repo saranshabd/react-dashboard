@@ -693,6 +693,14 @@ h6 {
   padding-bottom: 2rem;
 }
 
+.dropdown {
+  margin-left: 1.5rem;
+  background-color: rgb(185, 180, 180);
+  border-radius: 4px;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
 .StateMetaBottom {
   align-self: center;
   text-align: center;
@@ -722,7 +730,12 @@ h6 {
     min-height: 10rem;
     padding-left: 1rem;
     padding-right: 1rem;
-    padding-top: 1rem;
+    //padding-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-bottom: 1rem;
 
     h1,
     h2,

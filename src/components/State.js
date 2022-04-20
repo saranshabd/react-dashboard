@@ -160,7 +160,6 @@ function Mumbai() {
 
   const timeseriesDates = {};
   const timeseriesDate = Object.keys(timeseries);
-  console.log(timeseriesDate);
   for (let i = 0; i < Object.keys(timeseries).length; ++i) {
     const date = timeseriesDate[i];
 
@@ -201,7 +200,6 @@ function Mumbai() {
   }
 
   rechartData.push({type: 'deceased', dates: rechartDeceasedData});
-  console.log(rechartDeceasedData);
 
   // Data for positive
   const rechartPositiveData = [];
@@ -216,10 +214,6 @@ function Mumbai() {
   rechartData.push({type: 'positive', dates: rechartPositiveData});
 
   const wards = Object.keys(timeseries2['Mumbai']);
-  // All values of the wards
-  Object.keys(timeseries2['Mumbai']).forEach((e) => {
-    console.log(e);
-  });
 
   // All dates in the timeseries2
   const allDates = [];
@@ -306,8 +300,6 @@ function Mumbai() {
     }
     deceasedData.push({date: date, cases: cases});
   }
-
-  console.log(rechartConfirmedData);
 
   // Data for Recovered
   const rechartRecoveredData = [];

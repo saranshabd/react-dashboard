@@ -24,10 +24,11 @@ function StateMetaCard({
           </Tooltip>
         )}
       </div>
-      <h1>{statistic}</h1>
-      <h5>{date}</h5>
+      {statistic && <h1>{statistic}</h1>}
+      {date && <h5>{date}</h5>}
+
       {total && <h5>{`${t('India has')} ${total} ${t('CPL')}`}</h5>}
-      <p>{description}</p>
+      {description && <p>{description}</p>}
     </div>
   );
 }
