@@ -17,6 +17,7 @@ import {
   getStatistic,
   parseIndiaDate,
   retry,
+  getIndiaDateYesterdayISO,
 } from '../utils/commonFunctions';
 
 import {SmileyIcon} from '@primer/octicons-react';
@@ -321,34 +322,29 @@ function Mumbai() {
     rechartTSFData.push({date: date, cases: cases});
   }
 
-  const allDatesTimeseries = Object.keys(timeseries);
-
   let totalActive = 0;
-  for (let i = 0; i < Object.keys(stateData).length; i++) {
-    totalActive += stateData[allDatesTimeseries[i]]['total.active'];
-  }
 
   let totalCritical = 0;
-  for (let i = 0; i < Object.keys(stateData).length; i++) {
-    totalCritical += stateData[allDatesTimeseries[i]]['active.critical'];
-  }
 
   let totalStableSymptomatic = 0;
-  for (let i = 0; i < Object.keys(stateData).length; i++) {
-    totalStableSymptomatic +=
-      stateData[allDatesTimeseries[i]]['active.symptomatic'];
-  }
 
   let totalStableAsymptomatic = 0;
-  for (let i = 0; i < Object.keys(stateData).length; i++) {
-    totalStableAsymptomatic +=
-      stateData[allDatesTimeseries[i]]['active.asymptomatic'];
-  }
 
   let totalDeaths = 0;
-  for (let i = 0; i < Object.keys(stateData).length; i++) {
-    totalDeaths += stateData[allDatesTimeseries[i]]['delta.deaths'];
-  }
+
+  // Show TPR for week preceeding last updated date
+  const pastDates = Object.keys(timeseries || {}).filter(
+    (date) => date <= getIndiaDateYesterdayISO()
+  );
+
+  totalActive = timeseries[pastDates[pastDates.length - 1]]['total.active'];
+  totalCritical =
+    timeseries[pastDates[pastDates.length - 1]]['active.critical'];
+  totalStableSymptomatic =
+    timeseries[pastDates[pastDates.length - 1]]['active.symptomatic'];
+  totalStableAsymptomatic =
+    timeseries[pastDates[pastDates.length - 1]]['active.asymptomatic'];
+  totalDeaths = timeseries[pastDates[pastDates.length - 1]]['delta.deaths'];
 
   return (
     <>
