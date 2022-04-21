@@ -32,54 +32,57 @@ function StateMetaBottom({stateCode, data, timeseries}) {
     (date) => date <= getIndiaDateYesterdayISO()
   );
 
+  // console.log(pastDates);
+
+  // Object.keys(timeseries).forEach((ele) => {
+  //   reqData.contact_traced_high_risk +=
+  //     timeseries[ele]['contact.traced.high.risk'];
+  //   reqData.contact_traced_low_risk +=
+  //     timeseries[ele]['contact.traced.low.risk'];
+  //   reqData.currently_quarantined_home +=
+  //     timeseries[ele]['currently.quarantined.home'];
+  //   reqData.bed_available_dchc_dch_ccc2 +=
+  //     timeseries[ele]['bed.available.dchc.dch.ccc2'];
+  //   reqData.bed_available_icu += timeseries[ele]['bed.available.icu'];
+  //   reqData.bed_available_o2 += timeseries[ele]['bed.available.o2'];
+  //   reqData.bed_available_ventilator +=
+  //     timeseries[ele]['bed.available.ventilator'];
+  //   reqData.bed_occupied_dchc_dch_ccc2 +=
+  //     timeseries[ele]['bed.occupied.dchc.dch.ccc2'];
+  //   reqData.bed_occupied_icu += timeseries[ele]['bed.occupied.icu'];
+  //   reqData.bed_occupied_o2 += timeseries[ele]['bed.occupied.o2'];
+  //   reqData.bed_occupied_ventilator +=
+  //     timeseries[ele]['bed.occupied.ventilator'];
+  // });
+
+  const totalRecord = Object.keys(timeseries).length;
+  // console.log(totalRecord);
+  // console.log(pastDates[totalRecord - 1]);
+
+  const currentDateData = timeseries[pastDates[totalRecord - 1]];
   const reqData = {
-    active_ccc1_facilities: 0,
-    active_ccc2_facilities: 0,
-    contact_traced_high_risk: 0,
-    contact_traced_low_risk: 0,
-    containment_zones_active_micro_sealed_buildings: 0,
-    containment_zones_active_slums_chawls: 0,
-    currently_quarantined_home: 0,
-    bed_available_dchc_dch: 0,
-    bed_available_dchc_dch_ccc2: 0,
-    bed_available_icu: 0,
-    bed_available_o2: 0,
-    bed_available_ventilator: 0,
-    bed_occupied_dchc_dch: 0,
-    bed_occupied_dchc_dch_ccc2: 0,
-    bed_occupied_icu: 0,
-    bed_occupied_o2: 0,
-    bed_occupied_ventilator: 0,
+    contact_traced_high_risk: currentDateData['contact.traced.high.risk'],
+    contact_traced_low_risk: currentDateData['contact.traced.low.risk'],
+    currently_quarantined_home: currentDateData['currently.quarantined.home'],
+    bed_available_dchc_dch_ccc2: currentDateData['bed.available.dchc.dch.ccc2'],
+    bed_available_icu: currentDateData['bed.available.icu'],
+    bed_available_o2: currentDateData['bed.available.o2'],
+    bed_available_ventilator: currentDateData['bed.available.ventilator'],
+    bed_occupied_dchc_dch_ccc2: currentDateData['bed.occupied.dchc.dch.ccc2'],
+    bed_occupied_icu: currentDateData['bed.occupied.icu'],
+    bed_occupied_o2: currentDateData['bed.occupied.o2'],
+    bed_occupied_ventilator: currentDateData['bed.occupied.ventilator'],
   };
 
-  Object.keys(timeseries).forEach((ele) => {
-    reqData.contact_traced_high_risk +=
-      timeseries[ele]['contact.traced.high.risk'];
-    reqData.contact_traced_low_risk +=
-      timeseries[ele]['contact.traced.low.risk'];
-    reqData.currently_quarantined_home +=
-      timeseries[ele]['currently.quarantined.home'];
-    reqData.bed_available_dchc_dch_ccc2 +=
-      timeseries[ele]['bed.available.dchc.dch.ccc2'];
-    reqData.bed_available_icu += timeseries[ele]['bed.available.icu'];
-    reqData.bed_available_o2 += timeseries[ele]['bed.available.o2'];
-    reqData.bed_available_ventilator +=
-      timeseries[ele]['bed.available.ventilator'];
-    reqData.bed_occupied_dchc_dch_ccc2 +=
-      timeseries[ele]['bed.occupied.dchc.dch.ccc2'];
-    reqData.bed_occupied_icu += timeseries[ele]['bed.occupied.icu'];
-    reqData.bed_occupied_o2 += timeseries[ele]['bed.occupied.o2'];
-    reqData.bed_occupied_ventilator +=
-      timeseries[ele]['bed.occupied.ventilator'];
-  });
-
   function numberWithCommas(x) {
-    x = x.toString();
-    var lastThree = x.substring(x.length - 3);
-    var otherNumbers = x.substring(0, x.length - 3);
-    if (otherNumbers != '') lastThree = ',' + lastThree;
-    var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
-    return res;
+    if (x) {
+      x = x.toString();
+      var lastThree = x.substring(x.length - 3);
+      var otherNumbers = x.substring(0, x.length - 3);
+      if (otherNumbers != '') lastThree = ',' + lastThree;
+      var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
+      return res;
+    }
   }
 
   return (

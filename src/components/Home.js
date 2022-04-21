@@ -159,7 +159,7 @@ function Home() {
       <div className="Home">
         <div className={classnames('home-left', {expanded: expandTable})}>
           <a className="mumbai-btn-container" href="/state/mu">
-            <h1 className="mumbai-btn">Mumbai</h1>
+            <h1 className="mumbai-btn">Mumbai View - Click here</h1>
           </a>
           <br />
           <div className="header">

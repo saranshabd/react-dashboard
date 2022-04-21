@@ -232,31 +232,7 @@ function Mumbai() {
     let cases = 0;
     for (let j = 0; j < timeseries2['Mumbai']['A'].length; j++) {
       if (timeseries2['Mumbai']['A'][j][date]) {
-        cases +=
-          +timeseries2['Mumbai']['A'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['B'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['C'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['D'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['E'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['FN'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['FS'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['GN'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['GS'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['HE'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['HW'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['KE'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['KW'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['L'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['ME'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['MW'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['N'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['PN'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['PS'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['RC'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['RN'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['RS'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['S'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['T'][j][date]['delta.confirmed'];
+        cases += timeseries2['Mumbai']['A'][j][date]['delta.confirmed'];
         break;
       }
     }
@@ -270,31 +246,7 @@ function Mumbai() {
     let cases = 0;
     for (let j = 0; j < timeseries2['Mumbai']['A'].length; j++) {
       if (timeseries2['Mumbai']['A'][j][date]) {
-        cases +=
-          +timeseries2['Mumbai']['A'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['B'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['C'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['D'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['E'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['FN'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['FS'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['GN'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['GS'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['HE'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['HW'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['KE'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['KW'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['L'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['ME'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['MW'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['N'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['PN'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['PS'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['RC'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['RN'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['RS'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['S'][j][date]['delta.deceased'] +
-          timeseries2['Mumbai']['T'][j][date]['delta.deceased'];
+        cases += timeseries2['Mumbai']['A'][j][date]['delta.deceased'];
         break;
       }
     }
@@ -308,31 +260,7 @@ function Mumbai() {
     let cases = 0;
     for (let j = 0; j < timeseries2['Mumbai']['A'].length; j++) {
       if (timeseries2['Mumbai']['A'][j][date]) {
-        cases +=
-          +timeseries2['Mumbai']['A'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['B'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['C'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['D'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['E'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['FN'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['FS'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['GN'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['GS'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['HE'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['HW'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['KE'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['KW'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['L'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['ME'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['MW'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['N'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['PN'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['PS'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['RC'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['RN'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['RS'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['S'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['T'][j][date]['delta.recovered'];
+        cases += timeseries2['Mumbai']['A'][j][date]['delta.recovered'];
         break;
       }
     }
@@ -346,36 +274,13 @@ function Mumbai() {
     let cases = 0;
     for (let j = 0; j < timeseries2['Mumbai']['A'].length; j++) {
       if (timeseries2['Mumbai']['A'][j][date]) {
-        cases +=
-          +timeseries2['Mumbai']['A'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['B'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['C'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['D'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['E'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['FN'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['FS'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['GN'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['GS'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['HE'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['HW'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['KE'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['KW'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['L'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['ME'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['MW'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['N'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['PN'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['PS'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['RC'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['RN'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['RS'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['S'][j][date]['mean.RT'] +
-          timeseries2['Mumbai']['T'][j][date]['mean.RT'];
+        cases += timeseries2['Mumbai']['A'][j][date]['mean.RT'];
 
         break;
       }
     }
-    meanRTData.push({date: date, cases: cases});
+    const roundOfCases = (Math.round(cases * 100) / 100).toFixed(2);
+    meanRTData.push({date: date, cases: roundOfCases});
   }
 
   // Data for Total Sealed Building
@@ -484,6 +389,20 @@ function Mumbai() {
           isMumbai={true}
         />
       </div>
+      {/* <div className="State">
+        {data && (
+          <Suspense fallback={<div />}>
+            <StateMetaBottom
+              {...{
+                stateCode,
+                data,
+              }}
+              timeseries={timeseries}
+            />
+          </Suspense>
+        )}
+      </div> */}
+
       <div className="State">
         {data && (
           <Suspense fallback={<div />}>

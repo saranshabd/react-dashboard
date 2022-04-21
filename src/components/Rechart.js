@@ -34,7 +34,7 @@ function Rechart({title, data}) {
                   fontFamily: 'Times New Roman',
                 }}
               ></YAxis>
-              <Legend />
+              {/* <Legend /> */}
               <Tooltip />
               {/* <Line dataKey="student" stroke="black" activeDot={{r: 8}} /> */}
               <Line
