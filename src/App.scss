@@ -686,11 +686,24 @@ h6 {
   width: 100%;
 }
 
+@media (max-width: 900px) {
+  .RechartNew {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
 .stateMap {
   margin-left: 9rem;
   margin-right: 3rem;
   padding-top: 5rem;
   padding-bottom: 2rem;
+}
+
+@media (max-width: 750px) {
+  .stateMap {
+    margin-left: 1rem;
+    margin-right: 0rem;
+  }
 }
 
 .dropdown {
@@ -912,6 +925,14 @@ h6 {
         color: $orange;
       }
     }
+  }
+}
+
+@media (max-width: 900px) {
+  .StateMetaBottom {
+    grid-template-columns: repeat(1, 1fr);
+    padding-left: 0rem;
+    padding-right: 0rem;
   }
 }
 

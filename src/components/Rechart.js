@@ -15,7 +15,7 @@ function Rechart({title, data}) {
       {title && data && (
         <div>
           <h3 className="text-heading">{title}</h3>
-          <ResponsiveContainer width="100%" aspect={1}>
+          <ResponsiveContainer width="100%" aspect={1.5}>
             <LineChart data={data}>
               {/* <CartesianGrid /> */}
               <XAxis
@@ -40,7 +40,7 @@ function Rechart({title, data}) {
               <Line
                 dataKey="cases"
                 stroke="#ff073a"
-                activeDot={{r: 8}}
+                activeDot={{r: 6}}
                 dot={false}
               />
             </LineChart>
