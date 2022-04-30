@@ -357,12 +357,21 @@ function Mumbai() {
           content={`Coronavirus Outbreak in ${STATE_NAMES[stateCode]}: Latest Map and Case Count`}
         />
       </Helmet>
+      <div className="dateDiv">
+        <div className="StateMetaBottom population">
+          <div className="meta-item population">
+            <h2>
+              Latest Data as of date: <u>{[pastDates[pastDates.length - 1]]}</u>
+            </h2>
+          </div>
+        </div>
+      </div>
 
       <div className="State" style={{position: 'relative'}}>
         <br />
         <br />
         <MapSwitcher {...{mapStatistic, setMapStatistic}} isMumbai={true} />
-        {totalActive &&
+        {/* {totalActive &&
           totalCritical &&
           totalStableSymptomatic &&
           totalStableAsymptomatic &&
@@ -377,7 +386,17 @@ function Mumbai() {
               totalDeaths={totalDeaths}
               fromState={true}
             />
-          )}
+          )} */}
+        <Level
+          data={stateData}
+          isMumbai={true}
+          totalActive={totalActive}
+          totalCritical={totalCritical}
+          totalStableSymptomatic={totalStableSymptomatic}
+          totalStableAsymptomatic={totalStableAsymptomatic}
+          totalDeaths={totalDeaths}
+          fromState={true}
+        />
         <Minigraphs
           timeseries={timeseriesDates}
           {...{stateCode}}

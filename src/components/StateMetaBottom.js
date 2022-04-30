@@ -75,7 +75,7 @@ function StateMetaBottom({stateCode, data, timeseries}) {
   };
 
   function numberWithCommas(x) {
-    if (x) {
+    if (x || x == 0) {
       x = x.toString();
       var lastThree = x.substring(x.length - 3);
       var otherNumbers = x.substring(0, x.length - 3);

@@ -706,6 +706,27 @@ h6 {
   }
 }
 
+.dateDiv {
+  margin-left: 4rem;
+  margin-right: -2rem;
+  padding-top: 5rem;
+  // padding-bottom: 2rem;
+}
+
+@media (max-width: 750px) {
+  .dateDiv {
+    // margin-left: 1rem;
+    // margin-right: 0rem;
+    text-align: center;
+    .meta-item {
+      h2 {
+        font-weight: 600;
+        font-size: 13px !important;
+      }
+    }
+  }
+}
+
 .dropdown {
   margin-left: 1.5rem;
   background-color: rgb(185, 180, 180);
