@@ -5,6 +5,7 @@ import {
   DATA_API_ROOT_MUMBAI_DISTRICT,
   STATE_NAMES,
   STATISTIC_CONFIGS,
+  API_REFRESH_INTERVAL,
   UNKNOWN_DISTRICT_KEY,
   DATA_API_ROOT_MUMBAI_WARD,
 } from '../constants';
@@ -20,6 +21,7 @@ import {
 import {SmileyIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import {formatISO, max} from 'date-fns';
+import useStickySWR from '../hooks/useStickySWR';
 import {
   memo,
   useMemo,
@@ -41,6 +43,7 @@ const Level = lazy(() => retry(() => import('./Level')));
 const VaccinationHeader = lazy(() =>
   retry(() => import('./VaccinationHeader'))
 );
+const Actions = lazy(() => retry(() => import('./Actions')));
 const MapExplorer = lazy(() => retry(() => import('./MapExplorer')));
 const MapSwitcher = lazy(() => retry(() => import('./MapSwitcher')));
 const Minigraphs = lazy(() => retry(() => import('./Minigraphs')));
@@ -76,14 +79,15 @@ function State() {
     }
   }, [regionHighlighted.stateCode, stateCode]);
 
-  const {data: timeseries, error: timeseriesResponseError} = useSWR(
-    `${DATA_API_ROOT_MUMBAI_DISTRICT}`,
+  const {data: timeseries} = useStickySWR(
+    `${DATA_API_ROOT}/timeseries.min.json`,
     fetcher,
     {
       revalidateOnMount: true,
-      refreshInterval: 100000,
+      refreshInterval: API_REFRESH_INTERVAL,
     }
   );
+
   const {data: timeseries2, error: timeseriesResponseError2} = useSWR(
     `${DATA_API_ROOT_MUMBAI_WARD}`,
     fetcher,
@@ -93,13 +97,52 @@ function State() {
     }
   );
 
-  const {data, error} = useSWR(`${DATA_API_ROOT_MUMBAI_DISTRICT}`, fetcher, {
+  // const {data, error} = useSWR(`${DATA_API_ROOT_MUMBAI_DISTRICT}`, fetcher, {
+  //   revalidateOnMount: true,
+  //   refreshInterval: 100000,
+  // });
+  const [date, setDate] = useState('2020-03-04');
+
+  // const {data} = useStickySWR(
+  //   `${DATA_API_ROOT}/data${date ? `-${date}` : ''}.min.json`,
+  //   fetcher,
+  //   {
+  //     revalidateOnMount: true,
+  //     refreshInterval: API_REFRESH_INTERVAL,
+  //   }
+  // );
+
+  // const {data, error} = useSWR(`${DATA_API_ROOT_MUMBAI_DISTRICT}`, fetcher, {
+  //   revalidateOnMount: true,
+  //   refreshInterval: 100000,
+  // });
+
+  let stateData1 = timeseries?.[stateCode];
+  let lastDate;
+
+  if (stateData1) {
+    let a = Object.keys(stateData1['dates']).length;
+    lastDate = Object.keys(stateData1['dates'])[a - 1];
+    // console.log(lastDate);
+
+    stateData1 = stateData1['dates'][lastDate];
+  }
+
+  const {data} = useSWR(`${DATA_API_ROOT}/data.min.json`, fetcher, {
     revalidateOnMount: true,
     refreshInterval: 100000,
   });
+
   const stateData = data?.[stateCode];
 
-  console.log(data);
+  // console.log(data);
+  // console.log(timeseries);
+  // console.log(timeseries2);
+  // console.log(data);
+  // console.log(stateData);
+  // console.log(stateData['dates']);
+
+  // console.log(stateData);
 
   const toggleShowAllDistricts = () => {
     setShowAllDistricts(!showAllDistricts);
@@ -190,6 +233,22 @@ function State() {
       {}
   );
 
+  // console.log(timeseries[stateCode]['dates']);
+  // console.log(date);
+  // console.log(data);
+
+  // let newTimeseriesData = {};
+  // const allDates = Object.keys(timeseries?.[stateCode]?.dates);
+  // console.log(timeseries?.[stateCode]?.dates['2022-05-11']);
+
+  // for (let i = 0; i < Object.keys(timeseries?.[stateCode]?.dates).length; i++) {
+  //   const currDate = allDates[i];
+  //   let tempDelta = timeseries[stateCode].dates[currDate];
+  //   tempDelta['delta'] = {...tempDelta['delta'], active: 156};
+  //   console.log(tempDelta);
+  // }
+  // console.log(allDates);
+
   return (
     <>
       <Helmet>
@@ -206,20 +265,40 @@ function State() {
         <div className="state-left">
           <StateHeader data={stateData} stateCode={stateCode} />
 
-          {/* <div style={{position: 'relative'}}>
-            <MapSwitcher {...{mapStatistic, setMapStatistic}} />
-            <Level data={stateData} />
-            <Minigraphs
-              timeseries={timeseries?.[stateCode]?.dates}
-              {...{stateCode}}
-              forceRender={!!timeseriesResponseError}
-            />
-          </div> */}
+          <>
+            {!timeseries && <div style={{minHeight: '61px'}} />}
+            {timeseries && (
+              <Suspense fallback={<div style={{minHeight: '61px'}} />}>
+                <Actions
+                  {...{
+                    date,
+                    setDate,
+                    dates: Object.keys(timeseries[stateCode]?.dates),
+                    lastUpdatedDate: lastDate,
+                  }}
+                />
+              </Suspense>
+            )}
+          </>
 
-          {stateData?.total?.vaccinated1 && (
-            <VaccinationHeader data={stateData} />
+          {/* This is working */}
+
+          {stateData && (
+            <div style={{position: 'relative'}}>
+              <MapSwitcher {...{mapStatistic, setMapStatistic}} />
+              <Level data={stateData} />
+              <Minigraphs
+                timeseries={timeseries?.[stateCode]?.dates}
+                {...{stateCode}}
+                // forceRender={!!timeseriesResponseError}
+              />
+            </div>
           )}
+          {/* This is partially working */}
 
+          {/* {stateData?.total?.vaccinated1 && (
+            <VaccinationHeader data={stateData} />
+          )} */}
           {data && (
             <Suspense fallback={<div style={{minHeight: '50rem'}} />}>
               <MapExplorer
@@ -242,7 +321,19 @@ function State() {
 
           <span ref={stateMetaElement} />
 
-          {isStateMetaVisible && data && (
+          {/* {isStateMetaVisible && data && (
+            <Suspense fallback={<div />}>
+              <StateMeta
+                {...{
+                  stateCode,
+                  data,
+                }}
+                timeseries={timeseries?.[stateCode]?.dates}
+              />
+            </Suspense>
+          )} */}
+
+          {data && (
             <Suspense fallback={<div />}>
               <StateMeta
                 {...{
@@ -350,7 +441,7 @@ function State() {
                     timeseries={timeseries?.[stateCode]?.dates}
                     statistic={primaryStatistic}
                     {...{stateCode, lookback}}
-                    forceRender={!!timeseriesResponseError}
+                    // forceRender={!!timeseriesResponseError}
                   />
                 </div>
               </div>
@@ -381,7 +472,7 @@ function State() {
                   setRegionHighlighted,
                   noRegionHighlightedDistrictData,
                 }}
-                forceRender={!!timeseriesResponseError}
+                // forceRender={!!timeseriesResponseError}
               />
             </Suspense>
           </>

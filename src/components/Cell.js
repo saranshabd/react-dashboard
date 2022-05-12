@@ -7,15 +7,57 @@ import {memo} from 'react';
 import {animated, useSpring} from 'react-spring';
 
 const Cell = ({statistic, data, getTableStatistic, noDistrictData}) => {
-  const total = getTableStatistic(data, statistic, 'total');
-  const delta = getTableStatistic(data, statistic, 'delta');
+  const newData = {};
+  newData['total'] = {
+    confirmed: data['total']['confirmed'],
+    active:
+      data['total']['confirmed'] -
+      data['total']['recovered'] -
+      data['total']['deceased'] -
+      data['total']['other'],
+    deceased: data['total']['deceased'],
+    other: data['total']['other'],
+    recovered: data['total']['recovered'],
+    tested: data['total']['tested'],
+    vaccinated1: data['total']['vaccinated1'],
+    vaccinated2: data['total']['vaccinated2'],
+    vaccinatedpd: data['total']['vaccinatedpd'],
+  };
+  newData['delta'] = {
+    confirmed: data['delta']['confirmed'],
+    active:
+      data['delta']['confirmed'] -
+      data['delta']['recovered'] -
+      data['delta']['deceased'] -
+      data['delta']['other'],
+    deceased: data['delta']['deceased'],
+    other: data['delta']['other'],
+    recovered: data['delta']['recovered'],
+    tested: data['delta']['tested'],
+    vaccinated1: data['delta']['vaccinated1'],
+    vaccinated2: data['delta']['vaccinated2'],
+    vaccinatedpd: data['delta']['vaccinatedpd'],
+  };
+
+  // for (let i = 0; i < timeseries.length; ++i) {
+  //   timeseriesDates[timeseries[i]['date']] = {
+  //     active: timeseries[i]['total.active'],
+  //     positive: timeseries[i]['delta.positive'],
+  //     deaths: timeseries[i]['delta.deaths'],
+  //     discharged: timeseries[i]['delta.discharged'],
+  //     critical: timeseries[i]['active.critical'],
+  //     stable_symptomatic: timeseries[i]['active.symptomatic'],
+  //     stable_asymptomatic: timeseries[i]['active.asymptomatic'],
+  //   };
+  // }
+  const total = getTableStatistic(newData, statistic, 'total');
+  const delta = getTableStatistic(newData, statistic, 'delta');
 
   const spring = useSpring({
     total: total,
     delta: delta,
     config: SPRING_CONFIG_NUMBERS,
   });
-
   const statisticConfig = STATISTIC_CONFIGS[statistic];
 
   return (
@@ -25,25 +67,29 @@ const Cell = ({statistic, data, getTableStatistic, noDistrictData}) => {
           className={classnames('delta', `is-${statistic}`)}
           title={delta}
         >
-          {spring.delta.to((delta) =>
-            !noDistrictData || !statisticConfig.hasPrimary
-              ? delta > 0
-                ? '\u2191' + formatNumber(delta, statisticConfig.format)
-                : delta < 0
-                ? '\u2193' +
-                  formatNumber(Math.abs(delta), statisticConfig.format)
-                : ''
-              : ''
-          )}
+          {statistic === 'active'
+            ? newData['delta']['active']
+            : spring.delta.to((delta) =>
+                !noDistrictData || !statisticConfig.hasPrimary
+                  ? delta > 0
+                    ? '\u2191' + formatNumber(delta, statisticConfig.format)
+                    : delta < 0
+                    ? '\u2193' +
+                      formatNumber(Math.abs(delta), statisticConfig.format)
+                    : ''
+                  : ''
+              )}
         </animated.div>
       )}
 
       <animated.div className="total" title={total}>
-        {spring.total.to((total) =>
-          !noDistrictData || !statisticConfig.hasPrimary
-            ? formatNumber(total, statisticConfig.format, statistic)
-            : '-'
-        )}
+        {statistic === 'active'
+          ? newData['total']['active']
+          : spring.total.to((total) =>
+              !noDistrictData || !statisticConfig.hasPrimary
+                ? formatNumber(total, statisticConfig.format, statistic)
+                : '-'
+            )}
       </animated.div>
     </div>
   );

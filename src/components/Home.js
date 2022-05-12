@@ -77,7 +77,6 @@ function Home() {
       refreshInterval: API_REFRESH_INTERVAL,
     }
   );
-
   const homeRightElement = useRef();
   const isVisible = useIsVisible(homeRightElement);
   const {width} = useWindowSize();
@@ -158,7 +157,7 @@ function Home() {
 
       <div className="Home">
         <div className={classnames('home-left', {expanded: expandTable})}>
-          <a className="mumbai-btn-container" href="/state/mu">
+          <a className="mumbai-btn-container" href="/mumbai">
             <h1 className="mumbai-btn">Mumbai View - Click here</h1>
           </a>
           <br />
@@ -209,7 +208,7 @@ function Home() {
             </>
           </div>
 
-          {!hideVaccinated && <VaccinationHeader data={data['TT']} />}
+          {/* {!hideVaccinated && <VaccinationHeader data={data['TT']} />} */}
 
           {data && (
             <Suspense fallback={<TableLoader />}>

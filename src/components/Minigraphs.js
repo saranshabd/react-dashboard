@@ -27,7 +27,10 @@ const margin = {top: 10, right: 10, bottom: 2, left: 10};
 const height = 75;
 const maxWidth = 120;
 
-function Minigraphs({timeseries, date: timelineDate, isMumbai = false}) {
+function Minigraphs({timeseries, date: timelineDate, isMumbai = false, test}) {
+  // console.log(timeseries);
+  // console.log(timeseries);
+  // console.log(isMumbai);
   const levelStatistics = isMumbai ? MUMBAI_LEVEL_STATISTICS : LEVEL_STATISTICS;
 
   const refs = useRef([]);
@@ -51,10 +54,18 @@ function Minigraphs({timeseries, date: timelineDate, isMumbai = false}) {
 
   const getMinigraphStatistic = useCallback(
     (date, statistic) => {
-      return getStatistic(timeseries?.[date], 'delta', statistic);
+      return getStatistic(
+        timeseries?.[date],
+        'delta',
+        statistic,
+        isMumbai,
+        test
+      );
     },
     [timeseries]
   );
+
+  // console.log(getMinigraphStatistic);
 
   useEffect(() => {
     if (!width) return;
@@ -165,6 +176,8 @@ function Minigraphs({timeseries, date: timelineDate, isMumbai = false}) {
         );
     });
   }, [endDate, dates, width, getMinigraphStatistic]);
+
+  // console.log(levelStatistics);
 
   return (
     <div className="Minigraph">

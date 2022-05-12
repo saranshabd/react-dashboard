@@ -12,6 +12,7 @@ const Volunteers = lazy(() => retry(() => import('./components/Volunteers')));
 const About = lazy(() => retry(() => import('./components/About')));
 const State = lazy(() => retry(() => import('./components/State')));
 const Mumbai = lazy(() => retry(() => import('./components/Mumbai')));
+const NewMumbai = lazy(() => retry(() => import('./components/NewMumbai')));
 const LanguageSwitcher = lazy(() =>
   retry(() => import('./components/LanguageSwitcher'))
 );
@@ -47,8 +48,8 @@ const App = () => {
       showInNavbar: false,
     },
     {
-      pageLink: '/state/mu',
-      view: Mumbai,
+      pageLink: '/mumbai',
+      view: NewMumbai,
       displayName: 'Mumbai',
       showInNavbar: false,
     },

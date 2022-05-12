@@ -348,6 +348,7 @@ function TimeseriesExplorer({
               noRegionHighlightedDistrictData,
             }}
           />
+          <h4>Pick time-period of analysis</h4>
           <TimeseriesBrush
             timeseries={selectedTimeseries}
             regionHighlighted={selectedRegion}

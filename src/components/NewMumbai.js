@@ -53,10 +53,10 @@ const Minigraphs = lazy(() => retry(() => import('./Minigraphs')));
 const StateHeader = lazy(() => retry(() => import('./StateHeader')));
 const StateMeta = lazy(() => retry(() => import('./StateMeta')));
 
-function Mumbai() {
+function NewMumbai() {
   // const {t} = useTranslation();
 
-  const stateCode = useParams().stateCode.toUpperCase();
+  const stateCode = 'MU';
 
   const [mapStatistic, setMapStatistic] = useSessionStorage(
     'mapStatistic',
@@ -372,21 +372,21 @@ function Mumbai() {
         <br />
         <MapSwitcher {...{mapStatistic, setMapStatistic}} isMumbai={true} />
         {/* {totalActive &&
-            totalCritical &&
-            totalStableSymptomatic &&
-            totalStableAsymptomatic &&
-            totalDeaths && (
-              <Level
-                data={stateData}
-                isMumbai={true}
-                totalActive={totalActive}
-                totalCritical={totalCritical}
-                totalStableSymptomatic={totalStableSymptomatic}
-                totalStableAsymptomatic={totalStableAsymptomatic}
-                totalDeaths={totalDeaths}
-                fromState={true}
-              />
-            )} */}
+          totalCritical &&
+          totalStableSymptomatic &&
+          totalStableAsymptomatic &&
+          totalDeaths && (
+            <Level
+              data={stateData}
+              isMumbai={true}
+              totalActive={totalActive}
+              totalCritical={totalCritical}
+              totalStableSymptomatic={totalStableSymptomatic}
+              totalStableAsymptomatic={totalStableAsymptomatic}
+              totalDeaths={totalDeaths}
+              fromState={true}
+            />
+          )} */}
         <Level
           data={stateData}
           isMumbai={true}
@@ -402,21 +402,22 @@ function Mumbai() {
           {...{stateCode}}
           forceRender={!!timeseriesResponseError}
           isMumbai={true}
+          test={'mumbai'}
         />
       </div>
       {/* <div className="State">
-          {data && (
-            <Suspense fallback={<div />}>
-              <StateMetaBottom
-                {...{
-                  stateCode,
-                  data,
-                }}
-                timeseries={timeseries}
-              />
-            </Suspense>
-          )}
-        </div> */}
+        {data && (
+          <Suspense fallback={<div />}>
+            <StateMetaBottom
+              {...{
+                stateCode,
+                data,
+              }}
+              timeseries={timeseries}
+            />
+          </Suspense>
+        )}
+      </div> */}
 
       <div className="State">
         {data && (
@@ -459,4 +460,4 @@ function Mumbai() {
   );
 }
 
-export default memo(Mumbai);
+export default memo(NewMumbai);

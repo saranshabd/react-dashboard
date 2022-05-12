@@ -76,6 +76,8 @@ function PureLevelItem({
             : statisticConfig.displayName == 'stable asymptomatic'
             ? numberWithCommas(totalStableAsymptomatic)
             : numberWithCommas(totalDeaths)
+          : statisticConfig.displayName == 'active'
+          ? numberWithCommas(totalActive)
           : spring.total.to((total) =>
               formatNumber(
                 total,
@@ -102,6 +104,13 @@ function Level({
   totalDeaths,
   fromState,
 }) {
+  if (!totalActive) {
+    totalActive =
+      data['total']['confirmed'] -
+      data['total']['recovered'] -
+      data['total']['deceased'] -
+      data['total']['other'];
+  }
   const levelStatistics = isMumbai ? MUMBAI_LEVEL_STATISTICS : LEVEL_STATISTICS;
 
   const trail = useMemo(() => {
