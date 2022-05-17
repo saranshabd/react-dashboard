@@ -42,7 +42,7 @@ function Timeseries({
   isMovingAverage,
   noRegionHighlightedDistrictData,
 }) {
-  console.log(timeseries);
+  // console.log(timeseries);
   const {t} = useTranslation();
   const refs = useRef([]);
   const [wrapperRef, {width, height}] = useMeasure();

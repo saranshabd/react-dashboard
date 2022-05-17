@@ -7,7 +7,7 @@ import {memo} from 'react';
 import {animated, useSpring} from 'react-spring';
 
 const Cell = ({statistic, data, getTableStatistic, noDistrictData}) => {
-  console.log(data);
+  // console.log(data);
   const newData = {};
   newData['total'] = {
     confirmed: data['total']['confirmed'],

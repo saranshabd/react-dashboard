@@ -87,7 +87,7 @@ function State() {
       refreshInterval: API_REFRESH_INTERVAL,
     }
   );
-  console.log(timeseries);
+  // console.log(timeseries);
 
   const {data: timeseries2, error: timeseriesResponseError2} = useSWR(
     `${DATA_API_ROOT_MUMBAI_WARD}`,

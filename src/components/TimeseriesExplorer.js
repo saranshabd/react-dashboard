@@ -48,7 +48,7 @@ function TimeseriesExplorer({
   isState = false,
   noRegionHighlightedDistrictData,
 }) {
-  console.log(timeseries);
+  // console.log(timeseries);
   const {t} = useTranslation();
   const [lookback, setLookback] = useLocalStorage('timeseriesLookbackDays', 90);
   const [chartType, setChartType] = useLocalStorage('chartType', 'delta');
