@@ -256,12 +256,12 @@ export const getStatistic = (
   if (isMumbai) return result;
   // console.log(test);
   if (statistic === 'active') {
-    return (
+    let x =
       data?.[type]?.['confirmed'] -
       data?.[type]?.['recovered'] -
       data?.[type]?.['deceased'] -
-      data?.[type]?.['other']
-    );
+      data?.[type]?.['other'];
+    return x < 0 ? -x : x;
   }
   return result;
 };
