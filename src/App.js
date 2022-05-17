@@ -42,6 +42,12 @@ const App = () => {
       showInNavbar: true,
     },
     {
+      pageLink: '/state/MU',
+      view: NewMumbai,
+      displayName: 'Mumbai',
+      showInNavbar: false,
+    },
+    {
       pageLink: '/state/:stateCode',
       view: State,
       displayName: 'State',
