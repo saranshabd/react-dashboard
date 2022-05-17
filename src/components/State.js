@@ -87,6 +87,7 @@ function State() {
       refreshInterval: API_REFRESH_INTERVAL,
     }
   );
+  console.log(timeseries);
 
   const {data: timeseries2, error: timeseriesResponseError2} = useSWR(
     `${DATA_API_ROOT_MUMBAI_WARD}`,
@@ -265,7 +266,7 @@ function State() {
         <div className="state-left">
           <StateHeader data={stateData} stateCode={stateCode} />
 
-          <>
+          {/* <>
             {!timeseries && <div style={{minHeight: '61px'}} />}
             {timeseries && (
               <Suspense fallback={<div style={{minHeight: '61px'}} />}>
@@ -279,7 +280,7 @@ function State() {
                 />
               </Suspense>
             )}
-          </>
+          </> */}
 
           {/* This is working */}
 
@@ -471,6 +472,7 @@ function State() {
                   regionHighlighted,
                   setRegionHighlighted,
                   noRegionHighlightedDistrictData,
+                  isState: true,
                 }}
                 // forceRender={!!timeseriesResponseError}
               />

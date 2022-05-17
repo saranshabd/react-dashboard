@@ -104,6 +104,7 @@ function Table({
   const [tableOption, setTableOption] = useState('States');
   const [isPerLakh, setIsPerLakh] = useState(false);
   const [isInfoVisible, setIsInfoVisible] = useState(false);
+  // console.log(isPerLakh);
 
   const getTableStatistic = useCallback(
     (data, statistic, type) => {
@@ -261,7 +262,7 @@ function Table({
             </animated.div>
           </Tooltip>
 
-          <Tooltip message={'Per lakh people'} hold>
+          {/* <Tooltip message={'Per lakh people'} hold>
             <animated.div
               className={classnames('toggle', 'lakh-toggle', {
                 'is-highlighted': isPerLakh,
@@ -283,7 +284,7 @@ function Table({
             >
               <Delta7Icon />
             </animated.div>
-          </Tooltip>
+          </Tooltip> */}
 
           <animated.div
             className={classnames('toggle', 'info-toggle', {
@@ -322,7 +323,7 @@ function Table({
                     <p>{t('Toggle between States/Districts')}</p>
                   </div>
 
-                  <div className="info-item">
+                  {/* <div className="info-item">
                     <div>
                       <PeopleIcon size={16} />
                     </div>
@@ -334,7 +335,7 @@ function Table({
                       <PulseIcon size={16} />
                     </div>
                     <p>{t('Last 7 day values')}</p>
-                  </div>
+                  </div> */}
 
                   <div className="info-item sort">
                     <div>
@@ -530,48 +531,46 @@ function Table({
 }
 
 const isEqual = (prevProps, currProps) => {
-//   if (
-//     !equal(
-//       prevProps.regionHighlighted?.districtName,
-//       currProps.regionHighlighted?.districtName
-//     )
-//   ) {
-//     return false;
-//   } else if (
-//     !equal(
-//       prevProps.regionHighlighted?.stateCode,
-//       currProps.regionHighlighted?.stateCode
-//     )
-//   ) {
-//     return false;
-//   } else if (!equal(prevProps.date, currProps.date)) {
-//     return false;
-//   } else if (!equal(prevProps.hideDistrictData, currProps.hideDistrictData)) {
-//     return false;
-//   } else if (
-//     !equal(prevProps.hideDistrictTestData, currProps.hideDistrictTestData)
-//   ) {
-//     return false;
-//   } else if (!equal(prevProps.hideVaccinated, currProps.hideVaccinated)) {
-//     return false;
-//   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
-//     return false;
-//   } else if (!equal(prevProps.lastDataDate, currProps.lastDataDate)) {
-//     return false;
-//   } else if (
-//     !equal(
-//       prevProps.data['TT'].total.confirmed,
-//       currProps.data['TT'].total.confirmed
-//     )
-//   ) {
-//     return false;
-//   } else if (
-//     !equal(prevProps.noDistrictDataStates, currProps.noDistrictDataStates)
-//   ) {
-//     return false;
-//   } else return true;
-//
-return false
+  if (
+    !equal(
+      prevProps.regionHighlighted?.districtName,
+      currProps.regionHighlighted?.districtName
+    )
+  ) {
+    return false;
+  } else if (
+    !equal(
+      prevProps.regionHighlighted?.stateCode,
+      currProps.regionHighlighted?.stateCode
+    )
+  ) {
+    return false;
+  } else if (!equal(prevProps.date, currProps.date)) {
+    return false;
+  } else if (!equal(prevProps.hideDistrictData, currProps.hideDistrictData)) {
+    return false;
+  } else if (
+    !equal(prevProps.hideDistrictTestData, currProps.hideDistrictTestData)
+  ) {
+    return false;
+  } else if (!equal(prevProps.hideVaccinated, currProps.hideVaccinated)) {
+    return false;
+  } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
+    return false;
+  } else if (!equal(prevProps.lastDataDate, currProps.lastDataDate)) {
+    return false;
+  } else if (
+    !equal(
+      prevProps.data['TT'].total.confirmed,
+      currProps.data['TT'].total.confirmed
+    )
+  ) {
+    return false;
+  } else if (
+    !equal(prevProps.noDistrictDataStates, currProps.noDistrictDataStates)
+  ) {
+    return false;
+  } else return true;
 };
 
 export default memo(Table, isEqual);

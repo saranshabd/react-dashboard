@@ -3,7 +3,7 @@ import React from 'react';
 function Contributors() {
   return (
     <div className="contributors" style={{marginTop: '20px'}}>
-      <a href="http://thinkief.org/">
+      <a href="http://thinkief.org/" target={'blank'}>
         <img
           className="contributorItem"
           //   src={require('../ief.png').default}

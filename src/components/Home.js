@@ -46,7 +46,7 @@ const TimeseriesExplorer = lazy(() =>
 function Home() {
   const [regionHighlighted, setRegionHighlighted] = useState({
     stateCode: 'TT',
-    districtName: '',
+    districtName: null,
   });
 
   const [anchor, setAnchor] = useLocalStorage('anchor', null);
@@ -68,6 +68,7 @@ function Home() {
       refreshInterval: API_REFRESH_INTERVAL,
     }
   );
+  // console.log(timeseries);
 
   const {data} = useStickySWR(
     `${DATA_API_ROOT}/data${date ? `-${date}` : ''}.min.json`,
@@ -77,6 +78,9 @@ function Home() {
       refreshInterval: API_REFRESH_INTERVAL,
     }
   );
+
+  // console.log(data);
+
   const homeRightElement = useRef();
   const isVisible = useIsVisible(homeRightElement);
   const {width} = useWindowSize();
@@ -168,7 +172,7 @@ function Home() {
 
             {!data && !timeseries && <div style={{height: '60rem'}} />}
 
-            <>
+            {/* <>
               {!timeseries && <div style={{minHeight: '61px'}} />}
               {timeseries && (
                 <Suspense fallback={<div style={{minHeight: '61px'}} />}>
@@ -182,7 +186,7 @@ function Home() {
                   />
                 </Suspense>
               )}
-            </>
+            </> */}
           </div>
 
           <div style={{position: 'relative', marginTop: '1rem'}}>

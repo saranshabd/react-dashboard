@@ -7,6 +7,7 @@ import {memo} from 'react';
 import {animated, useSpring} from 'react-spring';
 
 const Cell = ({statistic, data, getTableStatistic, noDistrictData}) => {
+  console.log(data);
   const newData = {};
   newData['total'] = {
     confirmed: data['total']['confirmed'],
@@ -68,7 +69,7 @@ const Cell = ({statistic, data, getTableStatistic, noDistrictData}) => {
           title={delta}
         >
           {statistic === 'active'
-            ? newData['delta']['active']
+            ? formatNumber(newData['delta']['active'])
             : spring.delta.to((delta) =>
                 !noDistrictData || !statisticConfig.hasPrimary
                   ? delta > 0
@@ -84,7 +85,7 @@ const Cell = ({statistic, data, getTableStatistic, noDistrictData}) => {
 
       <animated.div className="total" title={total}>
         {statistic === 'active'
-          ? newData['total']['active']
+          ? formatNumber(newData['total']['active'])
           : spring.total.to((total) =>
               !noDistrictData || !statisticConfig.hasPrimary
                 ? formatNumber(total, statisticConfig.format, statistic)

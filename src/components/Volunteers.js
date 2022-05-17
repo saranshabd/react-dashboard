@@ -19,9 +19,6 @@ import useSWR from 'swr';
 const VOLUNTEERS_DOMAIN = 'https://volunteers.covid19india.org';
 const PLACEHOLDER_IMG = 'placeholder.jpg';
 
-
-
-
 function Member({className, style, name, bio, link, image, socials = {}}) {
   const [loaded, setLoaded] = useState(false);
 
@@ -95,58 +92,71 @@ function Volunteers() {
   //   revalidateOnReconnect: false,
   // });
 
-const data = [
-  {
-    "name": "IIT-Hyderabad",
-    "bio": "",
-    "socials": {
-      "github": ""
-    }
-  },
-  {
-    "name": "iCART",
-    "bio": "",
-    "socials": {
-      "github": ""
-    }
-  },
-  {
-    "name": "BMC",
-    "bio": "",
-    "socials": {
-      "github": ""
-    }
-  },
-  {
-    "name": "Colin Bowers",
-    "bio": "",
-    "socials": {
-      "github": ""
-    }
-  },
-  {
-    "name": "Isaac  Khader",
-    "bio": "",
-    "socials": {
-      "github": ""
-    }
-  },
-  {
-    "name": "Murray Ware",
-    "bio": "",
-    "socials": {
-      "github": ""
-    }
-  },
-  {
-    "name": "Anton Massinger",
-    "bio": "",
-    "socials": {
-      "github": ""
-    }
-  }
-  ]
-
+  const data = [
+    {
+      name: 'IIT-Hyderabad',
+      bio: '',
+      socials: {
+        github: '',
+      },
+    },
+    {
+      name: 'iCART',
+      bio: '',
+      socials: {
+        github: '',
+      },
+    },
+    {
+      name: 'BMC',
+      bio: '',
+      socials: {
+        github: '',
+      },
+    },
+    {
+      name: 'Colin Bowers',
+      bio: '',
+      socials: {
+        github: '',
+      },
+    },
+    {
+      name: 'Isaac  Khader',
+      bio: '',
+      socials: {
+        github: '',
+      },
+    },
+    {
+      name: 'Murray Ware',
+      bio: '',
+      socials: {
+        github: '',
+      },
+    },
+    {
+      name: 'Anton Massinger',
+      bio: '',
+      socials: {
+        github: '',
+      },
+    },
+    {
+      name: 'Manik Rawat',
+      bio: '',
+      socials: {
+        github: '',
+      },
+    },
+    {
+      name: 'Shabd Saran',
+      bio: '',
+      socials: {
+        github: '',
+      },
+    },
+  ];
 
   const dataAugemented = useMemo(() => [...(data || []), {}], [data]);
 
@@ -187,8 +197,8 @@ const data = [
             className={classnames('description', 'fadeInUp')}
             style={{animationDelay: '0.1s'}}
           >
-            We would like to thank the volunteers who extended their time and effort towards collating and
-            publishing COVID-19 data for India.
+            We would like to thank the volunteers who extended their time and
+            effort towards collating and publishing COVID-19 data for India.
           </div>
         </div>
         <div className="members">
@@ -198,11 +208,13 @@ const data = [
               (Object.keys(item).length > 0 ? (
                 <Member {...item} {...{style}} />
               ) : (
-                <animated.div className="last" {...{style}}>
-                  <Member className={'first'} />
-                  <Member className={'second'} />
-                  <Member className={'third'} bio="And many more..." />
-                </animated.div>
+                <>
+                  <animated.div className="last" {...{style}}>
+                    <Member className={'first'} />
+                    <Member className={'second'} />
+                    <Member className={'third'} bio="And many more..." />
+                  </animated.div>
+                </>
               ))
           )}
         </div>
