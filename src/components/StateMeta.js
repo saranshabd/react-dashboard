@@ -26,18 +26,24 @@ function Fraction({numerator, denominator}) {
 
 function StateMeta({stateCode, data, timeseries}) {
   const {t} = useTranslation();
+  console.log(data);
 
-  const confirmedPerLakh = getStatistic(data[stateCode], 'total', 'confirmed', {
-    normalizedByPopulationPer: 'lakh',
-  });
-  const testPerLakh = getStatistic(data[stateCode], 'total', 'tested', {
-    normalizedByPopulationPer: 'lakh',
-  });
-  const totalConfirmedPerLakh = getStatistic(data['TT'], 'total', 'confirmed', {
-    normalizedByPopulationPer: 'lakh',
-  });
+  const newConfirmesPerLakh =
+    (data[stateCode]['total']['confirmed'] /
+      data[stateCode]['meta']['population']) *
+    100000;
+
+  const newTotalConfirmesPerLakh =
+    (data['TT']['total']['confirmed'] / data['TT']['meta']['population']) *
+    100000;
+
+  const newTestPerLakh =
+    (data[stateCode]['total']['tested'] / data['TT']['meta']['population']) *
+    100000;
 
   const activePercent = getStatistic(data[stateCode], 'total', 'activeRatio');
+  const newActivePercent = activePercent.toFixed(2);
+  console.log(newActivePercent);
   const recoveryPercent = getStatistic(
     data[stateCode],
     'total',
@@ -81,8 +87,8 @@ function StateMeta({stateCode, data, timeseries}) {
         <StateMetaCard
           className="confirmed"
           title={t('Confirmed Per Lakh')}
-          statistic={formatNumber(confirmedPerLakh)}
-          total={formatNumber(totalConfirmedPerLakh)}
+          statistic={formatNumber(newConfirmesPerLakh)}
+          total={formatNumber(newTotalConfirmesPerLakh)}
           formula={
             <>
               {`${1e5} x `}
@@ -93,7 +99,7 @@ function StateMeta({stateCode, data, timeseries}) {
             </>
           }
           description={`
-            ~${formatNumber(confirmedPerLakh, 'long')} ${t(
+            ~${formatNumber(newConfirmesPerLakh, 'long')} ${t(
             'out of every lakh people in'
           )} ${STATE_NAMES[stateCode]} ${t(
             'have tested positive for the virus.'
@@ -104,7 +110,9 @@ function StateMeta({stateCode, data, timeseries}) {
         <StateMetaCard
           className="active"
           title={t('Active Ratio')}
-          statistic={`${formatNumber(activePercent, '%')}`}
+          statistic={`${
+            newActivePercent < 0 ? -newActivePercent : newActivePercent
+          }%`}
           formula={
             <>
               {'100 x '}
@@ -115,9 +123,9 @@ function StateMeta({stateCode, data, timeseries}) {
             </>
           }
           description={
-            activePercent > 0
+            newActivePercent > 0
               ? `${t('For every 100 confirmed cases')}, ~${formatNumber(
-                  activePercent,
+                  newActivePercent,
                   'long'
                 )} ${t('are currently infected.')}`
               : t('Currently, there are no active cases in this state.')
@@ -200,7 +208,7 @@ function StateMeta({stateCode, data, timeseries}) {
         <StateMetaCard
           className="tpl"
           title={t('Tests Per Lakh')}
-          statistic={`${formatNumber(testPerLakh)}`}
+          statistic={`${formatNumber(newTestPerLakh)}`}
           formula={
             <>
               {`${1e5} x `}
@@ -211,16 +219,16 @@ function StateMeta({stateCode, data, timeseries}) {
             </>
           }
           date={
-            testPerLakh && data[stateCode]?.meta?.tested?.date
+            newTestPerLakh && data[stateCode]?.meta?.tested?.date
               ? `${t('As of')} ${formatLastUpdated(
                   data[stateCode].meta.tested.date
                 )} ${t('ago')}`
               : ''
           }
           description={
-            testPerLakh > 0
+            newTestPerLakh > 0
               ? `${t('For every lakh people in')} ${STATE_NAMES[stateCode]},
-                ~${formatNumber(testPerLakh, 'long')} ${t(
+                ~${formatNumber(newTestPerLakh, 'long')} ${t(
                   'samples were tested.'
                 )}`
               : t('No tests have been conducted in this state yet.')

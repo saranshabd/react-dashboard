@@ -230,7 +230,7 @@ function Row({
               )}
             </div>
 
-            {data.districts && UNKNOWN_DISTRICT_KEY in data.districts && (
+            {/* {data.districts && UNKNOWN_DISTRICT_KEY in data.districts && (
               <div className="state-meta-bottom">
                 <div className={classnames('disclaimer')}>
                   <AlertIcon />
@@ -239,7 +239,7 @@ function Row({
                   </span>
                 </div>
               </div>
-            )}
+            )} */}
           </div>
 
           <div className={classnames('row', 'heading')}>
