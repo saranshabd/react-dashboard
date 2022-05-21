@@ -127,7 +127,7 @@ function StateMap({
             <Rechart title={'Confirmed'} data={confirmed} />
             <Rechart title={'Deceased'} data={deceased} />
             <Rechart title={'Recovered'} data={recovered} />
-            <Rechart title={'RT'} data={rt} />
+            {/* <Rechart title={'RT'} data={rt} /> */}
           </div>
         </div>
       </div>

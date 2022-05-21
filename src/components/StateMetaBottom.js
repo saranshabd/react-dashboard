@@ -119,7 +119,7 @@ function StateMetaBottom({stateCode, data, timeseries}) {
               statistic={numberWithCommas(reqData.currently_quarantined_home)}
             />
           </div>
-          <div className="StateMetaBottom population">
+          {/* <div className="StateMetaBottom population">
             <div className="meta-item population">
               <h3>{t('Covid19 Bed Management')}</h3>
             </div>
@@ -166,7 +166,7 @@ function StateMetaBottom({stateCode, data, timeseries}) {
               title={t('Bed Occupied Ventilator')}
               statistic={numberWithCommas(reqData.bed_occupied_ventilator)}
             />
-          </div>
+          </div> */}
         </>
       )}
     </>
