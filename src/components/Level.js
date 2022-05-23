@@ -68,16 +68,16 @@ function PureLevelItem({
       <animated.h1>
         {fromState
           ? statisticConfig.displayName == 'active'
-            ? numberWithCommas(totalActive)
+            ? formatNumber(totalActive)
             : statisticConfig.displayName == 'critical'
-            ? numberWithCommas(totalCritical)
+            ? formatNumber(totalCritical)
             : statisticConfig.displayName == 'stable symptomatic'
-            ? numberWithCommas(totalStableSymptomatic)
+            ? formatNumber(totalStableSymptomatic)
             : statisticConfig.displayName == 'stable asymptomatic'
-            ? numberWithCommas(totalStableAsymptomatic)
-            : numberWithCommas(totalDeaths)
+            ? formatNumber(totalStableAsymptomatic)
+            : formatNumber(totalDeaths)
           : statisticConfig.displayName == 'active'
-          ? numberWithCommas(totalActive)
+          ? formatNumber(totalActive)
           : spring.total.to((total) =>
               formatNumber(
                 total,

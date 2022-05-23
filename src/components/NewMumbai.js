@@ -138,14 +138,17 @@ function NewMumbai() {
 
   if (timeseriesResponseError) {
     console.log(timeseriesResponseError);
+    location.reload();
     return <h1>Something went wrong</h1>;
   }
   if (timeseriesResponseError2) {
     console.log(timeseriesResponseError2);
+    location.reload();
     return <h1>Something went wrong</h1>;
   }
   if (error) {
     console.log(error);
+    location.reload();
     return <h1>Something went wrong</h1>;
   }
   if (!timeseries || !timeseries2 || !data) {
