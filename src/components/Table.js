@@ -56,6 +56,7 @@ function Table({
   hideVaccinated,
   lastDataDate,
   noDistrictDataStates,
+  isMumbai = true,
 }) {
   const {t} = useTranslation();
   const [sortData, setSortData] = useSessionStorage('sortData', {
@@ -297,17 +298,22 @@ function Table({
           </animated.div>
         </div>
 
-        <Tooltip message={`${expandTable ? 'Collapse' : 'Expand'} table`} hold>
-          <animated.div
-            className={classnames('toggle', 'expand-table-toggle', {
-              'is-highlighted': expandTable,
-            })}
-            style={trail[4]}
-            onClick={setExpandTable.bind(this, !expandTable)}
+        {!isMumbai && (
+          <Tooltip
+            message={`${expandTable ? 'Collapse' : 'Expand'} table`}
+            hold
           >
-            <FoldDownIcon size={16} />
-          </animated.div>
-        </Tooltip>
+            <animated.div
+              className={classnames('toggle', 'expand-table-toggle', {
+                'is-highlighted': expandTable,
+              })}
+              style={trail[4]}
+              onClick={setExpandTable.bind(this, !expandTable)}
+            >
+              <FoldDownIcon size={16} />
+            </animated.div>
+          </Tooltip>
+        )}
       </div>
 
       {transition(
@@ -396,35 +402,37 @@ function Table({
             gridTemplateColumns: `repeat(${tableStatistics.length + 1}, auto)`,
           }}
         >
-          <div className="row heading">
-            <div
-              className="cell heading"
-              onClick={handleSortClick.bind(this, 'regionName')}
-            >
-              <div>{t(!showDistricts ? 'State/UT' : 'District')}</div>
-              {sortData.sortColumn === 'regionName' && (
-                <div className={'sort-icon'}>
-                  {sortData.isAscending ? (
-                    <SortAscIcon size={12} />
-                  ) : (
-                    <SortDescIcon size={12} />
-                  )}
-                </div>
-              )}
-            </div>
+          {!isMumbai && (
+            <div className="row heading">
+              <div
+                className="cell heading"
+                onClick={handleSortClick.bind(this, 'regionName')}
+              >
+                <div>{t(!showDistricts ? 'State/UT' : 'District')}</div>
+                {sortData.sortColumn === 'regionName' && (
+                  <div className={'sort-icon'}>
+                    {sortData.isAscending ? (
+                      <SortAscIcon size={12} />
+                    ) : (
+                      <SortDescIcon size={12} />
+                    )}
+                  </div>
+                )}
+              </div>
 
-            {tableStatistics.map((statistic) => (
-              <HeaderCell
-                key={statistic}
-                {...{
-                  statistic,
-                  sortData,
-                  setSortData,
-                }}
-                handleSort={handleSortClick.bind(this, statistic)}
-              />
-            ))}
-          </div>
+              {tableStatistics.map((statistic) => (
+                <HeaderCell
+                  key={statistic}
+                  {...{
+                    statistic,
+                    sortData,
+                    setSortData,
+                  }}
+                  handleSort={handleSortClick.bind(this, statistic)}
+                />
+              ))}
+            </div>
+          )}
 
           {!showDistricts &&
             Object.keys(states)
