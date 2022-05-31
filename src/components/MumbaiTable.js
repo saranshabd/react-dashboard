@@ -45,9 +45,18 @@ export default function MumbaiTable({wards, timeseries2, date}) {
 
   return (
     <div id="mumbaiTable">
-      <TableContainer component={Paper}>
+      <TableContainer
+        sx={{
+          backgroundColor: 'transparent !important',
+        }}
+        component={Paper}
+      >
         <Table
-          sx={{minWidth: '100%', border: '2px solid black'}}
+          sx={{
+            minWidth: '100%',
+            border: '2px solid #6c757d99',
+            backgroundColor: 'transparent',
+          }}
           aria-label="simple table"
         >
           <TableHead
@@ -55,30 +64,50 @@ export default function MumbaiTable({wards, timeseries2, date}) {
           >
             <TableRow>
               <TableCell
-                sx={{textAlign: 'center', borderBottom: '2px solid black'}}
+                sx={{
+                  textAlign: 'center',
+                  borderBottom: '2px solid #6c757d99',
+                  color: 'red',
+                }}
               >
                 <h3>Ward</h3>
               </TableCell>
               <TableCell
-                sx={{textAlign: 'center', borderBottom: '2px solid black'}}
+                sx={{
+                  textAlign: 'center',
+                  borderBottom: '2px solid #6c757d99',
+                  color: 'red',
+                }}
                 Tabalign="right"
               >
                 <h3>Confirmed</h3>
               </TableCell>
               <TableCell
-                sx={{textAlign: 'center', borderBottom: '2px solid black'}}
+                sx={{
+                  textAlign: 'center',
+                  borderBottom: '2px solid #6c757d99',
+                  color: 'red',
+                }}
                 align="right"
               >
                 <h3>Deceased</h3>
               </TableCell>
               <TableCell
-                sx={{textAlign: 'center', borderBottom: '2px solid black'}}
+                sx={{
+                  textAlign: 'center',
+                  borderBottom: '2px solid #6c757d99',
+                  color: 'red',
+                }}
                 align="right"
               >
                 <h3>Recovered</h3>
               </TableCell>
               <TableCell
-                sx={{textAlign: 'center', borderBottom: '2px solid black'}}
+                sx={{
+                  textAlign: 'center',
+                  borderBottom: '2px solid #6c757d99',
+                  color: 'red',
+                }}
                 align="right"
               >
                 <h3>mean RT</h3>
@@ -94,22 +123,54 @@ export default function MumbaiTable({wards, timeseries2, date}) {
                 }}
               >
                 <TableCell
-                  sx={{textAlign: 'center'}}
+                  sx={{
+                    textAlign: 'center',
+                    color: '#fd7e14',
+                    borderBottom: '2px solid #6c757d99',
+                  }}
                   component="th"
                   scope="row"
                 >
                   <h4>{row.name}</h4>
                 </TableCell>
-                <TableCell sx={{textAlign: 'center'}} align="right">
+                <TableCell
+                  sx={{
+                    textAlign: 'center',
+                    color: '#6c757d99',
+                    borderBottom: '2px solid #6c757d99',
+                  }}
+                  align="right"
+                >
                   <h4>{row.calories}</h4>
                 </TableCell>
-                <TableCell sx={{textAlign: 'center'}} align="right">
+                <TableCell
+                  sx={{
+                    textAlign: 'center',
+                    color: '#6c757d99',
+                    borderBottom: '2px solid #6c757d99',
+                  }}
+                  align="right"
+                >
                   <h4>{row.fat}</h4>
                 </TableCell>
-                <TableCell sx={{textAlign: 'center'}} align="right">
+                <TableCell
+                  sx={{
+                    textAlign: 'center',
+                    color: '#6c757d99',
+                    borderBottom: '2px solid #6c757d99',
+                  }}
+                  align="right"
+                >
                   <h4>{row.carbs}</h4>
                 </TableCell>
-                <TableCell sx={{textAlign: 'center'}} align="right">
+                <TableCell
+                  sx={{
+                    textAlign: 'center',
+                    color: '#6c757d99',
+                    borderBottom: '2px solid #6c757d99',
+                  }}
+                  align="right"
+                >
                   <h4>{row.protein}</h4>
                 </TableCell>
               </TableRow>
