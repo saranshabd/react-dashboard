@@ -2,6 +2,7 @@ import Tooltip from './Tooltip';
 
 import {InfoIcon} from '@primer/octicons-react';
 import {useTranslation} from 'react-i18next';
+import StateMetaMap from './StateMetaMap';
 
 function StateMetaCard({
   title,
@@ -11,6 +12,8 @@ function StateMetaCard({
   date,
   description,
   className,
+  isMumbai = false,
+  data = {},
 }) {
   const {t} = useTranslation();
 
@@ -29,6 +32,7 @@ function StateMetaCard({
 
       {total && <h5>{`${t('India has')} ${total} ${t('CPL')}`}</h5>}
       {description && <p>{description}</p>}
+      {isMumbai && <StateMetaMap newData={data} />}
     </div>
   );
 }
