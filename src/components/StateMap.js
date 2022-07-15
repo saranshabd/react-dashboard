@@ -97,9 +97,6 @@ function StateMap({
     <>
       <div className="stateMapHeader">
         <div>
-          <h1>Ward-Wise Stats</h1>
-        </div>
-        <div>
           <FormControl variant="standard" sx={{m: 1, minWidth: 120}}>
             <div className="dropdown">
               <Select

@@ -681,7 +681,7 @@ h6 {
   text-align: center;
   display: grid;
   grid-gap: 1rem;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   //margin-bottom: 3rem;
   width: 100%;
 }
@@ -693,10 +693,9 @@ h6 {
 }
 
 .stateMap {
-  margin-left: 9rem;
+  margin-left: 13rem;
   margin-right: 3rem;
   padding-top: 5rem;
-  padding-bottom: 2rem;
 }
 
 @media (max-width: 750px) {
@@ -764,7 +763,7 @@ h6 {
     min-height: 10rem;
     padding-left: 1rem;
     padding-right: 1rem;
-    //padding-top: 1rem;
+    padding-top: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1008,6 +1007,10 @@ h6 {
     width: 100vw;
     z-index: 10;
   }
+}
+
+.mumbaiTable {
+  margin: 2rem;
 }
 
 .StatisticDropdown {

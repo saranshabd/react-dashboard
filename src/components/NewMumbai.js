@@ -10,6 +10,8 @@ import {
   UNKNOWN_DISTRICT_KEY,
   DATA_API_ROOT_MUMBAI_WARD,
 } from '../constants';
+import TableLoader from './loaders/Table';
+
 import useIsVisible from '../hooks/useIsVisible';
 import {
   fetcher,
@@ -40,6 +42,7 @@ import useSWR from 'swr';
 import StateMetaBottom from './StateMetaBottom';
 import Rechart from './Rechart';
 import StateMap from './StateMap';
+import MumbaiTable from './MumbaiTable';
 
 const DeltaBarGraph = lazy(() => retry(() => import('./DeltaBarGraph')));
 const Footer = lazy(() => retry(() => import('./Footer')));
@@ -52,6 +55,7 @@ const MapSwitcher = lazy(() => retry(() => import('./MapSwitcher')));
 const Minigraphs = lazy(() => retry(() => import('./Minigraphs')));
 const StateHeader = lazy(() => retry(() => import('./StateHeader')));
 const StateMeta = lazy(() => retry(() => import('./StateMeta')));
+const Table = lazy(() => retry(() => import('./Table')));
 
 function NewMumbai() {
   // const {t} = useTranslation();
@@ -349,6 +353,49 @@ function NewMumbai() {
     timeseries[pastDates[pastDates.length - 1]]['active.asymptomatic'];
   totalDeaths = timeseries[pastDates[pastDates.length - 1]]['delta.deaths'];
 
+  // console.log(data);
+  // console.log(regionHighlighted);
+  // console.log(setRegionHighlighted);
+  // console.log(expandTable);
+  // console.log(setExpandTable);
+  // console.log(hideDistrictData);
+  // console.log(hideDistrictTestData);
+  // console.log(hideVaccinated);
+  // console.log(lastDataDate);
+  // console.log(noDistrictDataStates);
+
+  console.log(timeseries2);
+  console.log(Object.keys(timeseries2['Mumbai']).length);
+
+  console.log(pastDates[pastDates.length - 1]);
+
+  const data2 = {};
+
+  for (let i = 0; i < Object.keys(timeseries2['Mumbai']).length; i++) {
+    const district = Object.keys(timeseries2['Mumbai'])[i];
+    const date = pastDates[pastDates.length - 1];
+    const len = timeseries2['Mumbai'][district].length;
+    const d = timeseries2['Mumbai'][district][len - 1];
+    console.log(timeseries2['Mumbai'][district][len - 1]);
+    data2[district] = {
+      total: {
+        confirmed: d[date]['delta.confirmed'],
+        deceased: d[date]['delta.deceased'],
+        recovered: d[date]['delta.recovered'],
+        RT: d[date]['mean.RT'],
+      },
+    };
+    // data2.push({
+    //   [district]: {
+    //     total: {
+    //       confirmed: d[date]['delta.confirmed'],
+    //     },
+    //   },
+    // });
+  }
+
+  console.log(data2);
+
   return (
     <>
       <Helmet>
@@ -421,6 +468,39 @@ function NewMumbai() {
           </Suspense>
         )}
       </div> */}
+      <div className="stateMap">
+        <h1>Ward-Wise Stats</h1>
+      </div>
+      <div className="State">
+        <div className={classnames('state-left')}>
+          {wards && timeseries2 && pastDates[pastDates.length - 1] && (
+            <MumbaiTable
+              wards={wards}
+              timeseries2={timeseries2}
+              date={pastDates[pastDates.length - 1]}
+            />
+          )}
+        </div>
+        <div className={classnames('state-right')}>
+          {allDates &&
+            wards &&
+            timeseries2 &&
+            rechartConfirmedData &&
+            rechartRecoveredData &&
+            deceasedData &&
+            meanRTData && (
+              <StateMap
+                wards={wards}
+                data={timeseries2['Mumbai']}
+                allDates={allDates}
+                allConfirmedData={rechartConfirmedData}
+                allRecoveredData={rechartRecoveredData}
+                allDeceasedData={deceasedData}
+                allMeanRT={meanRTData}
+              />
+            )}
+        </div>
+      </div>
 
       <div className="State">
         {data && (
@@ -436,7 +516,7 @@ function NewMumbai() {
         )}
       </div>
 
-      <div className="stateMap">
+      {/* <div className="stateMap">
         <h1>
           {allDates &&
             wards &&
@@ -456,7 +536,7 @@ function NewMumbai() {
               />
             )}
         </h1>
-      </div>
+      </div> */}
 
       <Footer />
     </>

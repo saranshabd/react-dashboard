@@ -24,7 +24,7 @@ function Fraction({numerator, denominator}) {
   );
 }
 
-function StateMetaBottom({stateCode, data, timeseries}) {
+function StateMetaBottom({stateCode, data, timeseries, allDates}) {
   const {t} = useTranslation();
 
   // Show TPR for week preceeding last updated date
@@ -74,6 +74,22 @@ function StateMetaBottom({stateCode, data, timeseries}) {
     bed_occupied_ventilator: currentDateData['bed.occupied.ventilator'],
   };
 
+  const dates = Object.keys(timeseries);
+
+  function getData(x) {
+    let data = [];
+
+    for (let i = 0; i < dates.length; i++) {
+      const date = dates[i];
+      const d = {
+        data: timeseries[date][x],
+      };
+      data.push(d);
+    }
+
+    return data;
+  }
+
   function numberWithCommas(x) {
     if (x || x == 0) {
       x = x.toString();
@@ -99,11 +115,15 @@ function StateMetaBottom({stateCode, data, timeseries}) {
               className="confirmed"
               title={t('Contact Traced High Risk')}
               statistic={numberWithCommas(reqData.contact_traced_high_risk)}
+              isMumbai={true}
+              data={getData('contact.traced.high.risk')}
             />
             <StateMetaCard
               className="confirmed"
               title={t('Contact Traced Low Risk')}
               statistic={numberWithCommas(reqData.contact_traced_low_risk)}
+              isMumbai={true}
+              data={getData('contact.traced.low.risk')}
             />
           </div>
 
@@ -117,9 +137,11 @@ function StateMetaBottom({stateCode, data, timeseries}) {
               className="confirmed"
               title={t('Currently Quarantined Home')}
               statistic={numberWithCommas(reqData.currently_quarantined_home)}
+              isMumbai={true}
+              data={getData('currently.quarantined.home')}
             />
           </div>
-          {/* <div className="StateMetaBottom population">
+          <div className="StateMetaBottom population">
             <div className="meta-item population">
               <h3>{t('Covid19 Bed Management')}</h3>
             </div>
@@ -129,44 +151,60 @@ function StateMetaBottom({stateCode, data, timeseries}) {
               className="confirmed"
               title={t('Bed Available DCHC DCH CCC2')}
               statistic={numberWithCommas(reqData.bed_available_dchc_dch_ccc2)}
+              isMumbai={true}
+              data={getData('bed.available.dchc.dch.ccc2')}
             />
             <StateMetaCard
               className="confirmed"
               title={t('Bed Available ICU')}
               statistic={numberWithCommas(reqData.bed_available_icu)}
+              isMumbai={true}
+              data={getData('bed.available.icu')}
             />
             <StateMetaCard
               className="confirmed"
               title={t('Bed Available O2')}
               statistic={numberWithCommas(reqData.bed_available_o2)}
+              isMumbai={true}
+              data={getData('bed.available.o2')}
             />
             <StateMetaCard
               className="confirmed"
               title={t('Bed Available Ventilator')}
               statistic={numberWithCommas(reqData.bed_available_ventilator)}
+              isMumbai={true}
+              data={getData('bed.available.ventilator')}
             />
 
             <StateMetaCard
               className="confirmed"
               title={t('Bed Occupied DCHC DCH CCC2')}
               statistic={numberWithCommas(reqData.bed_occupied_dchc_dch_ccc2)}
+              isMumbai={true}
+              data={getData('bed.occupied.dchc.dch.ccc2')}
             />
             <StateMetaCard
               className="confirmed"
               title={t('Bed Occupied ICU')}
               statistic={numberWithCommas(reqData.bed_occupied_icu)}
+              isMumbai={true}
+              data={getData('bed.occupied.icu')}
             />
             <StateMetaCard
               className="confirmed"
               title={t('Bed Occupied O2')}
               statistic={numberWithCommas(reqData.bed_occupied_o2)}
+              isMumbai={true}
+              data={getData('bed.occupied.o2')}
             />
             <StateMetaCard
               className="confirmed"
               title={t('Bed Occupied Ventilator')}
               statistic={numberWithCommas(reqData.bed_occupied_ventilator)}
+              isMumbai={true}
+              data={getData('bed.occupied.ventilator')}
             />
-          </div> */}
+          </div>
         </>
       )}
     </>

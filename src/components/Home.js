@@ -149,6 +149,26 @@ function Home() {
     regionHighlighted.districtName !== UNKNOWN_DISTRICT_KEY &&
     noDistrictDataStates[regionHighlighted.stateCode];
 
+  // regionHighlighted,
+  //               setRegionHighlighted,
+  //               expandTable,
+  //               setExpandTable,
+  //               hideDistrictData,
+  //               hideDistrictTestData,
+  //               hideVaccinated,
+  //               lastDataDate,
+  //               noDistrictDataStates,
+  console.log(data);
+  console.log(regionHighlighted);
+  console.log(setRegionHighlighted);
+  console.log(expandTable);
+  console.log(setExpandTable);
+  console.log(hideDistrictData);
+  console.log(hideDistrictTestData);
+  console.log(hideVaccinated);
+  console.log(lastDataDate);
+  console.log(noDistrictDataStates);
+
   return (
     <>
       <Helmet>
