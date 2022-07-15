@@ -13,7 +13,17 @@ import {memo, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {animated, useSpring} from 'react-spring';
 
-function PureLevelItem({statistic, total, delta}) {
+function PureLevelItem({
+  statistic,
+  total,
+  delta,
+  totalActive,
+  totalCritical,
+  totalStableSymptomatic,
+  totalStableAsymptomatic,
+  totalDeaths,
+  fromState,
+}) {
   const {t} = useTranslation();
   const spring = useSpring({
     total: total,
@@ -22,6 +32,14 @@ function PureLevelItem({statistic, total, delta}) {
   });
 
   const statisticConfig = STATISTIC_CONFIGS[statistic];
+  function numberWithCommas(x) {
+    x = x.toString();
+    var lastThree = x.substring(x.length - 3);
+    var otherNumbers = x.substring(0, x.length - 3);
+    if (otherNumbers != '') lastThree = ',' + lastThree;
+    var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
+    return res;
+  }
 
   return (
     <>
@@ -48,15 +66,27 @@ function PureLevelItem({statistic, total, delta}) {
         )}
       </animated.h4>
       <animated.h1>
-        {spring.total.to((total) =>
-          formatNumber(
-            total,
-            statisticConfig.format !== 'short'
-              ? statisticConfig.format
-              : 'long',
-            statistic
-          )
-        )}
+        {fromState
+          ? statisticConfig.displayName == 'active'
+            ? formatNumber(totalActive)
+            : statisticConfig.displayName == 'critical'
+            ? formatNumber(totalCritical)
+            : statisticConfig.displayName == 'stable symptomatic'
+            ? formatNumber(totalStableSymptomatic)
+            : statisticConfig.displayName == 'stable asymptomatic'
+            ? formatNumber(totalStableAsymptomatic)
+            : formatNumber(totalDeaths)
+          : statisticConfig.displayName == 'active'
+          ? formatNumber(totalActive)
+          : spring.total.to((total) =>
+              formatNumber(
+                total,
+                statisticConfig.format !== 'short'
+                  ? statisticConfig.format
+                  : 'long',
+                statistic
+              )
+            )}
       </animated.h1>
     </>
   );
@@ -64,7 +94,23 @@ function PureLevelItem({statistic, total, delta}) {
 
 const LevelItem = memo(PureLevelItem);
 
-function Level({data, isMumbai = false}) {
+function Level({
+  data,
+  isMumbai = false,
+  totalActive,
+  totalCritical,
+  totalStableSymptomatic,
+  totalStableAsymptomatic,
+  totalDeaths,
+  fromState,
+}) {
+  if (!totalActive) {
+    totalActive =
+      data['total']['confirmed'] -
+      data['total']['recovered'] -
+      data['total']['deceased'] -
+      data['total']['other'];
+  }
   const levelStatistics = isMumbai ? MUMBAI_LEVEL_STATISTICS : LEVEL_STATISTICS;
 
   const trail = useMemo(() => {
@@ -124,6 +170,12 @@ function Level({data, isMumbai = false}) {
                 : getStatistic(data, 'total', statistic)
             }
             delta={getStatistic(data, 'delta', statistic)}
+            totalActive={totalActive}
+            totalCritical={totalCritical}
+            totalStableSymptomatic={totalStableSymptomatic}
+            totalStableAsymptomatic={totalStableAsymptomatic}
+            totalDeaths={totalDeaths}
+            fromState={fromState}
           />
         </animated.div>
       ))}

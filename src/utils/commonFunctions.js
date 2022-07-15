@@ -140,6 +140,8 @@ export const getStatistic = (
   data,
   type,
   statistic,
+  test,
+  isMumbai = false,
   {
     expiredDate = null,
     normalizedByPopulationPer = null,
@@ -149,6 +151,9 @@ export const getStatistic = (
 ) => {
   // TODO: Replace delta with daily to remove ambiguity
   //       Or add another type for daily/delta
+
+  // console.log(data);
+  // console.log(isMumbai);
 
   if (expiredDate !== null) {
     if (STATISTIC_CONFIGS[statistic]?.category === 'tested') {
@@ -242,6 +247,21 @@ export const getStatistic = (
   }
   if (!statisticConfig?.canBeInfinite) {
     result = ((isNaN(result) || isFinite(result)) && result) || 0;
+  }
+  // // console.log(result);
+
+  // console.log(data);
+  // console.log(data?.total?.['confirmed']);
+
+  if (isMumbai) return result;
+  // console.log(test);
+  if (statistic === 'active') {
+    let x =
+      data?.[type]?.['confirmed'] -
+      data?.[type]?.['recovered'] -
+      data?.[type]?.['deceased'] -
+      data?.[type]?.['other'];
+    return x < 0 ? -x : x;
   }
   return result;
 };

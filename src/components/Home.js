@@ -46,7 +46,7 @@ const TimeseriesExplorer = lazy(() =>
 function Home() {
   const [regionHighlighted, setRegionHighlighted] = useState({
     stateCode: 'TT',
-    districtName: '',
+    districtName: null,
   });
 
   const [anchor, setAnchor] = useLocalStorage('anchor', null);
@@ -68,6 +68,7 @@ function Home() {
       refreshInterval: API_REFRESH_INTERVAL,
     }
   );
+  // console.log(timeseries);
 
   const {data} = useStickySWR(
     `${DATA_API_ROOT}/data${date ? `-${date}` : ''}.min.json`,
@@ -77,6 +78,8 @@ function Home() {
       refreshInterval: API_REFRESH_INTERVAL,
     }
   );
+
+  // console.log(data);
 
   const homeRightElement = useRef();
   const isVisible = useIsVisible(homeRightElement);
@@ -146,6 +149,26 @@ function Home() {
     regionHighlighted.districtName !== UNKNOWN_DISTRICT_KEY &&
     noDistrictDataStates[regionHighlighted.stateCode];
 
+  // regionHighlighted,
+  //               setRegionHighlighted,
+  //               expandTable,
+  //               setExpandTable,
+  //               hideDistrictData,
+  //               hideDistrictTestData,
+  //               hideVaccinated,
+  //               lastDataDate,
+  //               noDistrictDataStates,
+  console.log(data);
+  console.log(regionHighlighted);
+  console.log(setRegionHighlighted);
+  console.log(expandTable);
+  console.log(setExpandTable);
+  console.log(hideDistrictData);
+  console.log(hideDistrictTestData);
+  console.log(hideVaccinated);
+  console.log(lastDataDate);
+  console.log(noDistrictDataStates);
+
   return (
     <>
       <Helmet>
@@ -158,8 +181,8 @@ function Home() {
 
       <div className="Home">
         <div className={classnames('home-left', {expanded: expandTable})}>
-          <a className="mumbai-btn-container" href="/state/mu">
-            <h1 className="mumbai-btn">Mumbai</h1>
+          <a className="mumbai-btn-container" href="/mumbai">
+            <h1 className="mumbai-btn">Mumbai View - Click here</h1>
           </a>
           <br />
           <div className="header">
@@ -169,7 +192,7 @@ function Home() {
 
             {!data && !timeseries && <div style={{height: '60rem'}} />}
 
-            <>
+            {/* <>
               {!timeseries && <div style={{minHeight: '61px'}} />}
               {timeseries && (
                 <Suspense fallback={<div style={{minHeight: '61px'}} />}>
@@ -183,7 +206,7 @@ function Home() {
                   />
                 </Suspense>
               )}
-            </>
+            </> */}
           </div>
 
           <div style={{position: 'relative', marginTop: '1rem'}}>
@@ -209,7 +232,7 @@ function Home() {
             </>
           </div>
 
-          {!hideVaccinated && <VaccinationHeader data={data['TT']} />}
+          {/* {!hideVaccinated && <VaccinationHeader data={data['TT']} />} */}
 
           {data && (
             <Suspense fallback={<TableLoader />}>

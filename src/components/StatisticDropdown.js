@@ -29,19 +29,21 @@ const StatisticDropdown = ({
 
   const currentStatisticConfig = STATISTIC_CONFIGS[currentStatistic];
 
-  const statistics = useMemo(() => {
-    const filteredStatistics = TABLE_STATISTICS_EXPANDED.filter(
-      (statistic) =>
-        (mapType === MAP_TYPES.COUNTRY ||
-          STATISTIC_CONFIGS[statistic]?.category !== 'tested' ||
-          !hideDistrictTestData) &&
-        (STATISTIC_CONFIGS[statistic]?.category !== 'vaccinated' ||
-          !hideVaccinated)
-    );
-    return filteredStatistics.includes(currentStatistic)
-      ? filteredStatistics
-      : [currentStatistic, ...filteredStatistics];
-  }, [currentStatistic, mapType, hideDistrictTestData, hideVaccinated]);
+  // const statistics = useMemo(() => {
+  //   const filteredStatistics = TABLE_STATISTICS_EXPANDED.filter(
+  //     (statistic) =>
+  //       (mapType === MAP_TYPES.COUNTRY ||
+  //         STATISTIC_CONFIGS[statistic]?.category !== 'tested' ||
+  //         !hideDistrictTestData) &&
+  //       (STATISTIC_CONFIGS[statistic]?.category !== 'vaccinated' ||
+  //         !hideVaccinated)
+  //   );
+  //   return filteredStatistics.includes(currentStatistic)
+  //     ? filteredStatistics
+  //     : [currentStatistic, ...filteredStatistics];
+  // }, [currentStatistic, mapType, hideDistrictTestData, hideVaccinated]);
+
+  const statistics = ['confirmed', 'active', 'recovered', 'deceased'];
 
   const handleChange = useCallback(
     (event) => {

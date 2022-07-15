@@ -56,6 +56,7 @@ function Table({
   hideVaccinated,
   lastDataDate,
   noDistrictDataStates,
+  isMumbai = true,
 }) {
   const {t} = useTranslation();
   const [sortData, setSortData] = useSessionStorage('sortData', {
@@ -104,6 +105,7 @@ function Table({
   const [tableOption, setTableOption] = useState('States');
   const [isPerLakh, setIsPerLakh] = useState(false);
   const [isInfoVisible, setIsInfoVisible] = useState(false);
+  // console.log(isPerLakh);
 
   const getTableStatistic = useCallback(
     (data, statistic, type) => {
@@ -261,7 +263,7 @@ function Table({
             </animated.div>
           </Tooltip>
 
-          <Tooltip message={'Per lakh people'} hold>
+          {/* <Tooltip message={'Per lakh people'} hold>
             <animated.div
               className={classnames('toggle', 'lakh-toggle', {
                 'is-highlighted': isPerLakh,
@@ -283,7 +285,7 @@ function Table({
             >
               <Delta7Icon />
             </animated.div>
-          </Tooltip>
+          </Tooltip> */}
 
           <animated.div
             className={classnames('toggle', 'info-toggle', {
@@ -296,17 +298,22 @@ function Table({
           </animated.div>
         </div>
 
-        <Tooltip message={`${expandTable ? 'Collapse' : 'Expand'} table`} hold>
-          <animated.div
-            className={classnames('toggle', 'expand-table-toggle', {
-              'is-highlighted': expandTable,
-            })}
-            style={trail[4]}
-            onClick={setExpandTable.bind(this, !expandTable)}
+        {!isMumbai && (
+          <Tooltip
+            message={`${expandTable ? 'Collapse' : 'Expand'} table`}
+            hold
           >
-            <FoldDownIcon size={16} />
-          </animated.div>
-        </Tooltip>
+            <animated.div
+              className={classnames('toggle', 'expand-table-toggle', {
+                'is-highlighted': expandTable,
+              })}
+              style={trail[4]}
+              onClick={setExpandTable.bind(this, !expandTable)}
+            >
+              <FoldDownIcon size={16} />
+            </animated.div>
+          </Tooltip>
+        )}
       </div>
 
       {transition(
@@ -322,7 +329,7 @@ function Table({
                     <p>{t('Toggle between States/Districts')}</p>
                   </div>
 
-                  <div className="info-item">
+                  {/* <div className="info-item">
                     <div>
                       <PeopleIcon size={16} />
                     </div>
@@ -334,7 +341,7 @@ function Table({
                       <PulseIcon size={16} />
                     </div>
                     <p>{t('Last 7 day values')}</p>
-                  </div>
+                  </div> */}
 
                   <div className="info-item sort">
                     <div>
@@ -395,35 +402,37 @@ function Table({
             gridTemplateColumns: `repeat(${tableStatistics.length + 1}, auto)`,
           }}
         >
-          <div className="row heading">
-            <div
-              className="cell heading"
-              onClick={handleSortClick.bind(this, 'regionName')}
-            >
-              <div>{t(!showDistricts ? 'State/UT' : 'District')}</div>
-              {sortData.sortColumn === 'regionName' && (
-                <div className={'sort-icon'}>
-                  {sortData.isAscending ? (
-                    <SortAscIcon size={12} />
-                  ) : (
-                    <SortDescIcon size={12} />
-                  )}
-                </div>
-              )}
-            </div>
+          {!isMumbai && (
+            <div className="row heading">
+              <div
+                className="cell heading"
+                onClick={handleSortClick.bind(this, 'regionName')}
+              >
+                <div>{t(!showDistricts ? 'State/UT' : 'District')}</div>
+                {sortData.sortColumn === 'regionName' && (
+                  <div className={'sort-icon'}>
+                    {sortData.isAscending ? (
+                      <SortAscIcon size={12} />
+                    ) : (
+                      <SortDescIcon size={12} />
+                    )}
+                  </div>
+                )}
+              </div>
 
-            {tableStatistics.map((statistic) => (
-              <HeaderCell
-                key={statistic}
-                {...{
-                  statistic,
-                  sortData,
-                  setSortData,
-                }}
-                handleSort={handleSortClick.bind(this, statistic)}
-              />
-            ))}
-          </div>
+              {tableStatistics.map((statistic) => (
+                <HeaderCell
+                  key={statistic}
+                  {...{
+                    statistic,
+                    sortData,
+                    setSortData,
+                  }}
+                  handleSort={handleSortClick.bind(this, statistic)}
+                />
+              ))}
+            </div>
+          )}
 
           {!showDistricts &&
             Object.keys(states)
@@ -530,48 +539,46 @@ function Table({
 }
 
 const isEqual = (prevProps, currProps) => {
-//   if (
-//     !equal(
-//       prevProps.regionHighlighted?.districtName,
-//       currProps.regionHighlighted?.districtName
-//     )
-//   ) {
-//     return false;
-//   } else if (
-//     !equal(
-//       prevProps.regionHighlighted?.stateCode,
-//       currProps.regionHighlighted?.stateCode
-//     )
-//   ) {
-//     return false;
-//   } else if (!equal(prevProps.date, currProps.date)) {
-//     return false;
-//   } else if (!equal(prevProps.hideDistrictData, currProps.hideDistrictData)) {
-//     return false;
-//   } else if (
-//     !equal(prevProps.hideDistrictTestData, currProps.hideDistrictTestData)
-//   ) {
-//     return false;
-//   } else if (!equal(prevProps.hideVaccinated, currProps.hideVaccinated)) {
-//     return false;
-//   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
-//     return false;
-//   } else if (!equal(prevProps.lastDataDate, currProps.lastDataDate)) {
-//     return false;
-//   } else if (
-//     !equal(
-//       prevProps.data['TT'].total.confirmed,
-//       currProps.data['TT'].total.confirmed
-//     )
-//   ) {
-//     return false;
-//   } else if (
-//     !equal(prevProps.noDistrictDataStates, currProps.noDistrictDataStates)
-//   ) {
-//     return false;
-//   } else return true;
-//
-return false
+  if (
+    !equal(
+      prevProps.regionHighlighted?.districtName,
+      currProps.regionHighlighted?.districtName
+    )
+  ) {
+    return false;
+  } else if (
+    !equal(
+      prevProps.regionHighlighted?.stateCode,
+      currProps.regionHighlighted?.stateCode
+    )
+  ) {
+    return false;
+  } else if (!equal(prevProps.date, currProps.date)) {
+    return false;
+  } else if (!equal(prevProps.hideDistrictData, currProps.hideDistrictData)) {
+    return false;
+  } else if (
+    !equal(prevProps.hideDistrictTestData, currProps.hideDistrictTestData)
+  ) {
+    return false;
+  } else if (!equal(prevProps.hideVaccinated, currProps.hideVaccinated)) {
+    return false;
+  } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
+    return false;
+  } else if (!equal(prevProps.lastDataDate, currProps.lastDataDate)) {
+    return false;
+  } else if (
+    !equal(
+      prevProps.data['TT'].total.confirmed,
+      currProps.data['TT'].total.confirmed
+    )
+  ) {
+    return false;
+  } else if (
+    !equal(prevProps.noDistrictDataStates, currProps.noDistrictDataStates)
+  ) {
+    return false;
+  } else return true;
 };
 
 export default memo(Table, isEqual);

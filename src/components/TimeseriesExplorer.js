@@ -45,8 +45,10 @@ function TimeseriesExplorer({
   setAnchor,
   expandTable = false,
   hideVaccinated = false,
+  isState = false,
   noRegionHighlightedDistrictData,
 }) {
+  // console.log(timeseries);
   const {t} = useTranslation();
   const [lookback, setLookback] = useLocalStorage('timeseriesLookbackDays', 90);
   const [chartType, setChartType] = useLocalStorage('chartType', 'delta');
@@ -81,6 +83,8 @@ function TimeseriesExplorer({
   const isVisible = useIsVisible(explorerElement, {once: true});
   const {width} = useWindowSize();
 
+  // console.log(timeseries);
+
   const selectedRegion = useMemo(() => {
     if (timeseries?.[regionHighlighted.stateCode]?.districts) {
       return {
@@ -108,9 +112,9 @@ function TimeseriesExplorer({
   const regions = useMemo(() => {
     const states = Object.keys(timeseries || {})
       .filter((code) => code !== stateCode)
-      // .sort((code1, code2) =>
-      //   STATE_NAMES[code1].localeCompare(STATE_NAMES[code2])
-      // )
+      .sort((code1, code2) =>
+        STATE_NAMES[code1].localeCompare(STATE_NAMES[code2])
+      )
       .map((code) => {
         return {
           stateCode: code,
@@ -282,7 +286,7 @@ function TimeseriesExplorer({
             </div>
           </div>
 
-          <div
+          {/* <div
             className={`timeseries-mode ${
               chartType === 'total' ? 'disabled' : ''
             } moving-average`}
@@ -298,10 +302,10 @@ function TimeseriesExplorer({
               disabled={chartType !== 'delta'}
               onChange={setIsMovingAverage.bind(this, !isMovingAverage)}
             />
-          </div>
+          </div> */}
         </div>
       </div>
-      {/* {dropdownRegions && (
+      {dropdownRegions && !isState && (
         <div className="state-selection">
           <div className="dropdown">
             <select
@@ -331,7 +335,7 @@ function TimeseriesExplorer({
             <ReplyIcon />
           </div>
         </div>
-      )} */}
+      )}
       {isVisible && (
         <Suspense fallback={<TimeseriesLoader />}>
           <Timeseries
@@ -348,6 +352,7 @@ function TimeseriesExplorer({
               noRegionHighlightedDistrictData,
             }}
           />
+          <h4>Pick time-period of analysis</h4>
           <TimeseriesBrush
             timeseries={selectedTimeseries}
             regionHighlighted={selectedRegion}

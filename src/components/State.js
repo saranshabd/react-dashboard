@@ -1,12 +1,11 @@
 import {
   DATA_API_ROOT,
-  DATA_API_ROOT_MUMBAI_DISTRICT,
   MAP_STATISTICS,
-  MUMBAI_MAP_STATISTICS,
   PRIMARY_STATISTICS,
-  MUMBAI_PRIMARY_STATISTICS,
+  DATA_API_ROOT_MUMBAI_DISTRICT,
   STATE_NAMES,
   STATISTIC_CONFIGS,
+  API_REFRESH_INTERVAL,
   UNKNOWN_DISTRICT_KEY,
   DATA_API_ROOT_MUMBAI_WARD,
 } from '../constants';
@@ -22,6 +21,7 @@ import {
 import {SmileyIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import {formatISO, max} from 'date-fns';
+import useStickySWR from '../hooks/useStickySWR';
 import {
   memo,
   useMemo,
@@ -36,8 +36,6 @@ import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
 import {useSessionStorage} from 'react-use';
 import useSWR from 'swr';
-import StateMetaBottom from './StateMetaBottom';
-import Rechart from './Rechart';
 
 const DeltaBarGraph = lazy(() => retry(() => import('./DeltaBarGraph')));
 const Footer = lazy(() => retry(() => import('./Footer')));
@@ -45,14 +43,18 @@ const Level = lazy(() => retry(() => import('./Level')));
 const VaccinationHeader = lazy(() =>
   retry(() => import('./VaccinationHeader'))
 );
+const Actions = lazy(() => retry(() => import('./Actions')));
 const MapExplorer = lazy(() => retry(() => import('./MapExplorer')));
 const MapSwitcher = lazy(() => retry(() => import('./MapSwitcher')));
 const Minigraphs = lazy(() => retry(() => import('./Minigraphs')));
 const StateHeader = lazy(() => retry(() => import('./StateHeader')));
 const StateMeta = lazy(() => retry(() => import('./StateMeta')));
+const TimeseriesExplorer = lazy(() =>
+  retry(() => import('./TimeseriesExplorer'))
+);
 
-function Mumbai() {
-  // const {t} = useTranslation();
+function State() {
+  const {t} = useTranslation();
 
   const stateCode = useParams().stateCode.toUpperCase();
 
@@ -60,7 +62,7 @@ function Mumbai() {
     'mapStatistic',
     'active'
   );
-  // const [showAllDistricts, setShowAllDistricts] = useState(false);
+  const [showAllDistricts, setShowAllDistricts] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState({
     stateCode: stateCode,
     districtName: null,
@@ -77,14 +79,16 @@ function Mumbai() {
     }
   }, [regionHighlighted.stateCode, stateCode]);
 
-  const {data: timeseries, error: timeseriesResponseError} = useSWR(
-    `${DATA_API_ROOT_MUMBAI_DISTRICT}`,
+  const {data: timeseries} = useStickySWR(
+    `${DATA_API_ROOT}/timeseries.min.json`,
     fetcher,
     {
       revalidateOnMount: true,
-      refreshInterval: 100000,
+      refreshInterval: API_REFRESH_INTERVAL,
     }
   );
+  // console.log(timeseries);
+
   const {data: timeseries2, error: timeseriesResponseError2} = useSWR(
     `${DATA_API_ROOT_MUMBAI_WARD}`,
     fetcher,
@@ -94,54 +98,94 @@ function Mumbai() {
     }
   );
 
-  const {data, error} = useSWR(`${DATA_API_ROOT_MUMBAI_DISTRICT}`, fetcher, {
+  // const {data, error} = useSWR(`${DATA_API_ROOT_MUMBAI_DISTRICT}`, fetcher, {
+  //   revalidateOnMount: true,
+  //   refreshInterval: 100000,
+  // });
+  const [date, setDate] = useState('2020-03-04');
+
+  // const {data} = useStickySWR(
+  //   `${DATA_API_ROOT}/data${date ? `-${date}` : ''}.min.json`,
+  //   fetcher,
+  //   {
+  //     revalidateOnMount: true,
+  //     refreshInterval: API_REFRESH_INTERVAL,
+  //   }
+  // );
+
+  // const {data, error} = useSWR(`${DATA_API_ROOT_MUMBAI_DISTRICT}`, fetcher, {
+  //   revalidateOnMount: true,
+  //   refreshInterval: 100000,
+  // });
+
+  let stateData1 = timeseries?.[stateCode];
+  let lastDate;
+
+  if (stateData1) {
+    let a = Object.keys(stateData1['dates']).length;
+    lastDate = Object.keys(stateData1['dates'])[a - 1];
+    // console.log(lastDate);
+
+    stateData1 = stateData1['dates'][lastDate];
+  }
+
+  const {data} = useSWR(`${DATA_API_ROOT}/data.min.json`, fetcher, {
     revalidateOnMount: true,
     refreshInterval: 100000,
   });
 
-  const stateData = data;
+  const stateData = data?.[stateCode];
 
-  // const toggleShowAllDistricts = () => {
-  //   setShowAllDistricts(!showAllDistricts);
-  // };
+  // console.log(data);
+  // console.log(timeseries);
+  // console.log(timeseries2);
+  // console.log(data);
+  // console.log(stateData);
+  // console.log(stateData['dates']);
 
-  // const handleSort = (districtNameA, districtNameB) => {
-  //   const districtA = stateData.districts[districtNameA];
-  //   const districtB = stateData.districts[districtNameB];
-  //   return (
-  //     getStatistic(districtB, 'total', mapStatistic) -
-  //     getStatistic(districtA, 'total', mapStatistic)
-  //   );
-  // };
+  // console.log(stateData);
 
-  // const gridRowCount = useMemo(() => {
-  //   if (!stateData) return;
-  //   const gridColumnCount = window.innerWidth >= 540 ? 3 : 2;
-  //   const districtCount = stateData?.districts
-  //     ? Object.keys(stateData.districts).filter(
-  //         (districtName) => districtName !== 'Unknown'
-  //       ).length
-  //     : 0;
-  //   const gridRowCount = Math.ceil(districtCount / gridColumnCount);
-  //   return gridRowCount;
-  // }, [stateData]);
+  const toggleShowAllDistricts = () => {
+    setShowAllDistricts(!showAllDistricts);
+  };
+
+  const handleSort = (districtNameA, districtNameB) => {
+    const districtA = stateData.districts[districtNameA];
+    const districtB = stateData.districts[districtNameB];
+    return (
+      getStatistic(districtB, 'total', mapStatistic) -
+      getStatistic(districtA, 'total', mapStatistic)
+    );
+  };
+
+  const gridRowCount = useMemo(() => {
+    if (!stateData) return;
+    const gridColumnCount = window.innerWidth >= 540 ? 3 : 2;
+    const districtCount = stateData?.districts
+      ? Object.keys(stateData.districts).filter(
+          (districtName) => districtName !== 'Unknown'
+        ).length
+      : 0;
+    const gridRowCount = Math.ceil(districtCount / gridColumnCount);
+    return gridRowCount;
+  }, [stateData]);
 
   const stateMetaElement = useRef();
   const isStateMetaVisible = useIsVisible(stateMetaElement);
 
-  // const trail = useMemo(() => {
-  //   const styles = [];
+  const trail = useMemo(() => {
+    const styles = [];
 
-  //   [0, 0, 0, 0].map((element, index) => {
-  //     styles.push({
-  //       animationDelay: `${index * 250}ms`,
-  //     });
-  //     return null;
-  //   });
-  //   return styles;
-  // }, []);
+    [0, 0, 0, 0].map((element, index) => {
+      styles.push({
+        animationDelay: `${index * 250}ms`,
+      });
+      return null;
+    });
+    return styles;
+  }, []);
 
-  // const lookback = showAllDistricts ? (window.innerWidth >= 540 ? 10 : 8) : 6;
+  const lookback = showAllDistricts ? (window.innerWidth >= 540 ? 10 : 8) : 6;
 
   const lastDataDate = useMemo(() => {
     const updatedDates = [
@@ -156,16 +200,16 @@ function Mumbai() {
       : null;
   }, [stateData]);
 
-  // const primaryStatistic = MUMBAI_MAP_STATISTICS.includes(mapStatistic)
-  //   ? mapStatistic
-  //   : 'confirmed';
+  const primaryStatistic = MAP_STATISTICS.includes(mapStatistic)
+    ? mapStatistic
+    : 'confirmed';
 
   const noDistrictData = useMemo(() => {
     // Heuristic: All cases are in Unknown
     return !!(
       stateData?.districts &&
       stateData.districts?.[UNKNOWN_DISTRICT_KEY] &&
-      MUMBAI_PRIMARY_STATISTICS.every(
+      PRIMARY_STATISTICS.every(
         (statistic) =>
           getStatistic(stateData, 'total', statistic) ===
           getStatistic(
@@ -177,355 +221,34 @@ function Mumbai() {
     );
   }, [stateData]);
 
-  if (timeseriesResponseError) {
-    console.log(timeseriesResponseError);
-    return <h1>Something went wrong</h1>;
-  }
-  if (timeseriesResponseError2) {
-    console.log(timeseriesResponseError2);
-    return <h1>Something went wrong</h1>;
-  }
-  if (error) {
-    console.log(error);
-    return <h1>Something went wrong</h1>;
-  }
-  if (!timeseries || !timeseries2 || !data) {
-    return <h1>Loading</h1>;
-  }
-
-  // const statisticConfig = STATISTIC_CONFIGS[primaryStatistic];
+  const statisticConfig = STATISTIC_CONFIGS[primaryStatistic];
 
   const noRegionHighlightedDistrictData =
     regionHighlighted?.districtName &&
     regionHighlighted.districtName !== UNKNOWN_DISTRICT_KEY &&
     noDistrictData;
 
-  // const districts = Object.keys(
-  //   ((!noDistrictData || !statisticConfig.hasPrimary) &&
-  //     stateData?.districts) ||
-  //     {}
-  // );
+  const districts = Object.keys(
+    ((!noDistrictData || !statisticConfig.hasPrimary) &&
+      stateData?.districts) ||
+      {}
+  );
 
-  const timeseriesDates = {};
-  for (let i = 0; i < timeseries.length; ++i) {
-    timeseriesDates[timeseries[i]['date']] = {
-      active: timeseries[i]['total.active'],
-      positive: timeseries[i]['delta.positive'],
-      deaths: timeseries[i]['delta.deaths'],
-      discharged: timeseries[i]['delta.discharged'],
-      critical: timeseries[i]['active.critical'],
-      stable_symptomatic: timeseries[i]['active.symptomatic'],
-      stable_asymptomatic: timeseries[i]['active.asymptomatic'],
-    };
-  }
+  // console.log(timeseries[stateCode]['dates']);
+  // console.log(date);
+  // console.log(data);
 
-  const timeseriesDatesnew = {};
-  for (let i = 0; i < timeseries.length; ++i) {
-    timeseriesDatesnew[timeseries[i]['date']] = {};
-  }
+  // let newTimeseriesData = {};
+  // const allDates = Object.keys(timeseries?.[stateCode]?.dates);
+  // console.log(timeseries?.[stateCode]?.dates['2022-05-11']);
 
-  // console.log(timeseriesDates);
-  // console.log(timeseries);
-
-  const newDates = {};
-  for (let i = 0; i < timeseries.length; ++i) {
-    newDates[timeseries[i]['date']] = {
-      delta: {
-        confirmed: timeseries[i]['total.active'],
-        critical: timeseries[i]['total.active'],
-        deceased: timeseries[i]['delta.deaths'],
-        other: timeseries[i]['delta.tests'],
-        recovered: timeseries[i]['delta.discharged'],
-        tested: timeseries[i]['delta.tests'],
-      },
-    };
-  }
-  const newSendingObj = {MU: {dates: newDates}};
-
-  // Data which will be send to Rechart
-  const rechartData = [];
-
-  // Data for active
-  const rechartActiveData = [];
-  for (let i = 0; i < timeseries.length; ++i) {
-    const d = {
-      date: timeseries[i].date,
-      cases: timeseries[i]['total.active'],
-    };
-    rechartActiveData.push(d);
-  }
-
-  rechartData.push({type: 'active', dates: rechartActiveData});
-
-  // Data for deceased
-  const rechartDeceasedData = [];
-  for (let i = 0; i < timeseries.length; ++i) {
-    const d = {
-      date: timeseries[i].date,
-      cases: timeseries[i]['delta.deaths'],
-    };
-    rechartDeceasedData.push(d);
-  }
-
-  rechartData.push({type: 'deceased', dates: rechartDeceasedData});
-
-  // Data for positive
-  const rechartPositiveData = [];
-  for (let i = 0; i < timeseries.length; ++i) {
-    const d = {
-      date: timeseries[i].date,
-      cases: timeseries[i]['delta.positive'],
-    };
-    rechartPositiveData.push(d);
-  }
-
-  rechartData.push({type: 'positive', dates: rechartPositiveData});
-
-  // console.log(rechartActiveData);
-  // console.log(rechartData);
-
-  //console.log(timeseries);
-  // console.log(newSendingObj);
-  console.log(timeseries2);
-  console.log(Object.keys(timeseries2['Mumbai']).length);
-  console.log(timeseries2['Mumbai']['A'].length);
-  // console.log(stateData);
-  //console.log(Object.keys(timeseries2['Mumbai']['A'][0]));
-
-  // All dates in the timeseries2
-  const allDates = [];
-  for (let i = 0; i < timeseries2['Mumbai']['A'].length; i++) {
-    const d = timeseries2['Mumbai']['A'][i];
-    //console.log(Object.keys(d)[0]);
-    allDates.push({date: Object.keys(d)[0], cases: 0});
-  }
+  // for (let i = 0; i < Object.keys(timeseries?.[stateCode]?.dates).length; i++) {
+  //   const currDate = allDates[i];
+  //   let tempDelta = timeseries[stateCode].dates[currDate];
+  //   tempDelta['delta'] = {...tempDelta['delta'], active: 156};
+  //   console.log(tempDelta);
+  // }
   // console.log(allDates);
-
-  // Data for confirmed
-  const rechartConfirmedData = [];
-  // console.log(rechartConfirmedData);
-  for (let i = 0; i < timeseries2['Mumbai']['A'].length; i++) {
-    const date = allDates[i].date;
-    let cases = 0;
-    for (let j = 0; j < timeseries2['Mumbai']['A'].length; j++) {
-      if (timeseries2['Mumbai']['A'][j][date]) {
-        cases +=
-          +timeseries2['Mumbai']['A'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['B'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['C'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['D'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['E'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['FN'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['FS'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['GN'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['GS'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['HE'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['HW'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['KE'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['KW'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['L'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['ME'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['MW'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['N'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['PN'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['PS'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['RC'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['RN'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['RS'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['S'][j][date]['delta.confirmed'] +
-          timeseries2['Mumbai']['T'][j][date]['delta.confirmed'];
-        break;
-      }
-    }
-    rechartConfirmedData.push({date: date, cases: cases});
-  }
-
-  // Data for Recovered
-  const rechartRecoveredData = [];
-  for (let i = 0; i < timeseries2['Mumbai']['A'].length; i++) {
-    const date = allDates[i].date;
-    let cases = 0;
-    for (let j = 0; j < timeseries2['Mumbai']['A'].length; j++) {
-      if (timeseries2['Mumbai']['A'][j][date]) {
-        cases +=
-          +timeseries2['Mumbai']['A'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['B'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['C'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['D'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['E'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['FN'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['FS'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['GN'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['GS'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['HE'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['HW'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['KE'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['KW'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['L'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['ME'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['MW'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['N'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['PN'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['PS'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['RC'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['RN'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['RS'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['S'][j][date]['delta.recovered'] +
-          timeseries2['Mumbai']['T'][j][date]['delta.recovered'];
-        break;
-      }
-    }
-    rechartRecoveredData.push({date: date, cases: cases});
-  }
-
-  // Data for Total Sealed Building
-  const rechartTSBData = [];
-  for (let i = 0; i < timeseries2['Mumbai']['A'].length; i++) {
-    const date = allDates[i].date;
-    let cases = 0;
-    for (let j = 0; j < timeseries2['Mumbai']['A'].length; j++) {
-      if (timeseries2['Mumbai']['A'][j][date]) {
-        // if (timeseries2['Mumbai']['A'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['A'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['B'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['B'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['C'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['C'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['D'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['D'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['E'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['E'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['FN'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['FN'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['FS'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['FS'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['GN'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['GN'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['GS'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['GS'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['HE'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['HE'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['HW'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['HW'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['KE'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['KE'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['KW'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['KW'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['L'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['L'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['ME'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['ME'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['MW'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['MW'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['N'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['N'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['PN'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['PN'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['PS'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['PS'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['RC'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['RC'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['RN'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['RN'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['RS'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['RS'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['S'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['S'][j][date]['total.sealedbuildings'] = 0;
-        // if (timeseries2['Mumbai']['T'][j][date]['total.sealedbuildings'] >= 0)
-        //   continue;
-        // else timeseries2['Mumbai']['T'][j][date]['total.sealedbuildings'] = 0;
-        cases +=
-          +timeseries2['Mumbai']['A'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['B'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['C'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['D'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['E'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['FN'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['FS'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['GN'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['GS'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['HE'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['HW'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['KE'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['KW'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['L'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['ME'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['MW'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['N'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['PN'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['PS'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['RC'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['RN'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['RS'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['S'][j][date]['total.sealedbuildings'] +
-          timeseries2['Mumbai']['T'][j][date]['total.sealedbuildings'];
-        console.log(cases);
-        break;
-      }
-    }
-    rechartTSBData.push({date: date, cases: cases});
-  }
-
-  // Data for Total Sealed Building
-  const rechartTSFData = [];
-  for (let i = 0; i < timeseries2['Mumbai']['A'].length; i++) {
-    const date = allDates[i].date;
-    let cases = 0;
-    for (let j = 0; j < timeseries2['Mumbai']['A'].length; j++) {
-      if (timeseries2['Mumbai']['A'][j][date]) {
-        cases +=
-          +timeseries2['Mumbai']['A'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['B'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['C'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['D'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['E'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['FN'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['FS'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['GN'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['GS'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['HE'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['HW'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['KE'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['KW'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['L'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['ME'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['MW'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['N'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['PN'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['PS'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['RC'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['RN'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['RS'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['S'][j][date]['total.sealedfloors'] +
-          timeseries2['Mumbai']['T'][j][date]['total.sealedfloors'];
-        break;
-      }
-    }
-    rechartTSFData.push({date: date, cases: cases});
-  }
 
   return (
     <>
@@ -539,27 +262,44 @@ function Mumbai() {
         />
       </Helmet>
 
-      <div className="State" style={{position: 'relative'}}>
-        <br />
-        <br />
-        <MapSwitcher {...{mapStatistic, setMapStatistic}} isMumbai={true} />
-        <Level data={stateData} isMumbai={true} />
-        <Minigraphs
-          timeseries={timeseriesDates}
-          {...{stateCode}}
-          forceRender={!!timeseriesResponseError}
-          isMumbai={true}
-        />
-      </div>
-
       <div className="State">
         <div className="state-left">
           <StateHeader data={stateData} stateCode={stateCode} />
 
-          {stateData?.total?.vaccinated1 && (
-            <VaccinationHeader data={stateData} />
-          )}
+          {/* <>
+            {!timeseries && <div style={{minHeight: '61px'}} />}
+            {timeseries && (
+              <Suspense fallback={<div style={{minHeight: '61px'}} />}>
+                <Actions
+                  {...{
+                    date,
+                    setDate,
+                    dates: Object.keys(timeseries[stateCode]?.dates),
+                    lastUpdatedDate: lastDate,
+                  }}
+                />
+              </Suspense>
+            )}
+          </> */}
 
+          {/* This is working */}
+
+          {stateData && (
+            <div style={{position: 'relative'}}>
+              <MapSwitcher {...{mapStatistic, setMapStatistic}} />
+              <Level data={stateData} />
+              <Minigraphs
+                timeseries={timeseries?.[stateCode]?.dates}
+                {...{stateCode}}
+                // forceRender={!!timeseriesResponseError}
+              />
+            </div>
+          )}
+          {/* This is partially working */}
+
+          {/* {stateData?.total?.vaccinated1 && (
+            <VaccinationHeader data={stateData} />
+          )} */}
           {data && (
             <Suspense fallback={<div style={{minHeight: '50rem'}} />}>
               <MapExplorer
@@ -579,8 +319,10 @@ function Mumbai() {
               ></MapExplorer>
             </Suspense>
           )}
-          {/* 
-          {data && (
+
+          <span ref={stateMetaElement} />
+
+          {/* {isStateMetaVisible && data && (
             <Suspense fallback={<div />}>
               <StateMeta
                 {...{
@@ -591,12 +333,23 @@ function Mumbai() {
               />
             </Suspense>
           )} */}
-          {/* <span ref={stateMetaElement} /> */}
+
+          {data && (
+            <Suspense fallback={<div />}>
+              <StateMeta
+                {...{
+                  stateCode,
+                  data,
+                }}
+                timeseries={timeseries?.[stateCode]?.dates}
+              />
+            </Suspense>
+          )}
         </div>
 
         <div className="state-right">
           <>
-            {/* <div className="district-bar">
+            <div className="district-bar">
               <div
                 className={classnames('district-bar-top', {
                   expanded: showAllDistricts,
@@ -689,7 +442,7 @@ function Mumbai() {
                     timeseries={timeseries?.[stateCode]?.dates}
                     statistic={primaryStatistic}
                     {...{stateCode, lookback}}
-                    forceRender={!!timeseriesResponseError}
+                    // forceRender={!!timeseriesResponseError}
                   />
                 </div>
               </div>
@@ -709,114 +462,9 @@ function Mumbai() {
                   <div style={{height: '3.75rem', flexBasis: '15%'}} />
                 )}
               </div>
-            </div> */}
-
-            {/* line of action we have to change timeseries format to the required format the see what we can do */}
-            {/* <h1>Chart JS Start</h1>
-            <LineGraph data={newLineGraphData} />
-            <h1>Chart JS END</h1>
-            */}
-            {/* <div className="State" style={{position: 'relative'}}>
-              <br />
-              <br />
-              <Level data={stateData} isMumbai={true} />
-              <Minigraphs
-                timeseries={timeseriesDatesnew}
-                {...{stateCode}}
-                forceRender={!!timeseriesResponseError}
-                isMumbai={true}
-              />
-            </div> */}
-            <div className="Rechart">
-              <Rechart title={'Active'} data={rechartData[0].dates} />
-              <Rechart title={'Confirmed'} data={rechartConfirmedData} />
-              <Rechart title={'Deseased'} data={rechartData[1].dates} />
-
-              <Rechart title={'Recovered'} data={rechartRecoveredData} />
-              <Rechart title={'Total Sealed Buildings'} data={rechartTSBData} />
-              <Rechart title={'Total Sealed Floor'} data={rechartTSFData} />
-              {/* <Rechart
-                title={rechartData[2].type}
-                data={rechartData[2].dates}
-              />
-              <Rechart
-                title={rechartData[0].type}
-                data={rechartData[0].dates}
-              />
-              <Rechart
-                title={rechartData[2].type}
-                data={rechartData[2].dates}
-              /> */}
-              <Rechart title={'Positive'} data={rechartData[0].dates} />
-              {/* {rechartData &&
-                rechartData.map((e) => {
-                  console.log(e);
-                  console.log(e.type);
-                  console.log(e.dates);
-                  <Rechart title={e.type} data={e.dates} />;
-                })} */}
             </div>
 
-            {/* <div className="State" style={{position: 'relative'}}>
-              <br />
-              <br />
-              <MapSwitcher
-                {...{mapStatistic, setMapStatistic}}
-                isMumbai={true}
-              />
-              <Level data={stateData} isMumbai={true} />
-              <Minigraphs
-                timeseries={timeseriesDates}
-                {...{stateCode}}
-                forceRender={!!timeseriesResponseError}
-                isMumbai={true}
-              />
-            </div> */}
-
-            {/* <LineChart /> */}
-
-            {/* {timeseries && (
-              <Suspense fallback={<div style={{height: '50rem'}} />}>
-                <TimeseriesExplorer
-                  stateCode={stateCode}
-                  {...{
-                    timeseries: newSendingObj,
-                    regionHighlighted,
-                    setRegionHighlighted,
-                    noRegionHighlightedDistrictData,
-                  }}
-                  forceRender={!!timeseriesResponseError}
-                />
-              </Suspense>
-            )} */}
-            {/* {timeseries && (
-              <Suspense fallback={<div style={{height: '50rem'}} />}>
-                <TimeseriesExplorerState
-                  stateCode={stateCode}
-                  {...{
-                    timeseries: newSendingObj,
-                    regionHighlighted,
-                    setRegionHighlighted,
-                    noRegionHighlightedDistrictData,
-                  }}
-                  forceRender={!!timeseriesResponseError}
-                />
-              </Suspense>
-            )} */}
-            {/* <div className="State">
-              <br />
-              <br />
-              <Level data={stateData} isMumbai={true} />
-              <Minigraphs
-                timeseries={timeseriesDates}
-                {...{stateCode}}
-                forceRender={!!timeseriesResponseError}
-                isMumbai={true}
-              />
-            </div>
-            <div>
-            </div> */}
-            {/* <Suspense fallback={<div />}>
+            <Suspense fallback={<div />}>
               <TimeseriesExplorer
                 {...{
                   stateCode,
@@ -824,25 +472,13 @@ function Mumbai() {
                   regionHighlighted,
                   setRegionHighlighted,
                   noRegionHighlightedDistrictData,
+                  isState: true,
                 }}
-                forceRender={!!timeseriesResponseError}
+                // forceRender={!!timeseriesResponseError}
               />
-            </Suspense> */}
+            </Suspense>
           </>
         </div>
-      </div>
-      <div className="State">
-        {data && (
-          <Suspense fallback={<div />}>
-            <StateMetaBottom
-              {...{
-                stateCode,
-                data,
-              }}
-              timeseries={timeseries?.[stateCode]?.dates}
-            />
-          </Suspense>
-        )}
       </div>
 
       <Footer />
@@ -850,4 +486,4 @@ function Mumbai() {
   );
 }
 
-export default memo(Mumbai);
+export default memo(State);

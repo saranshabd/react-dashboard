@@ -24,101 +24,87 @@ function Fraction({numerator, denominator}) {
   );
 }
 
-function StateMetaBottom({stateCode, data, timeseries}) {
+function StateMetaBottom({stateCode, data, timeseries, allDates}) {
   const {t} = useTranslation();
-
-  const confirmedPerLakh = getStatistic(data[stateCode], 'total', 'confirmed', {
-    normalizedByPopulationPer: 'lakh',
-  });
-  const testPerLakh = getStatistic(data[stateCode], 'total', 'tested', {
-    normalizedByPopulationPer: 'lakh',
-  });
-  const totalConfirmedPerLakh = getStatistic(data['TT'], 'total', 'confirmed', {
-    normalizedByPopulationPer: 'lakh',
-  });
-
-  const activePercent = getStatistic(data[stateCode], 'total', 'activeRatio');
-  const recoveryPercent = getStatistic(
-    data[stateCode],
-    'total',
-    'recoveryRatio'
-  );
-  const deathPercent = getStatistic(data[stateCode], 'total', 'cfr');
 
   // Show TPR for week preceeding last updated date
   const pastDates = Object.keys(timeseries || {}).filter(
     (date) => date <= getIndiaDateYesterdayISO()
   );
-  const lastDate = pastDates[pastDates.length - 1];
-  const prevWeekDate = formatISO(subDays(parseIndiaDate(lastDate), 6));
 
-  const tprWeek = getStatistic(timeseries?.[lastDate], 'delta', 'tpr', {
-    movingAverage: true,
-  });
+  // console.log(pastDates);
 
+  // Object.keys(timeseries).forEach((ele) => {
+  //   reqData.contact_traced_high_risk +=
+  //     timeseries[ele]['contact.traced.high.risk'];
+  //   reqData.contact_traced_low_risk +=
+  //     timeseries[ele]['contact.traced.low.risk'];
+  //   reqData.currently_quarantined_home +=
+  //     timeseries[ele]['currently.quarantined.home'];
+  //   reqData.bed_available_dchc_dch_ccc2 +=
+  //     timeseries[ele]['bed.available.dchc.dch.ccc2'];
+  //   reqData.bed_available_icu += timeseries[ele]['bed.available.icu'];
+  //   reqData.bed_available_o2 += timeseries[ele]['bed.available.o2'];
+  //   reqData.bed_available_ventilator +=
+  //     timeseries[ele]['bed.available.ventilator'];
+  //   reqData.bed_occupied_dchc_dch_ccc2 +=
+  //     timeseries[ele]['bed.occupied.dchc.dch.ccc2'];
+  //   reqData.bed_occupied_icu += timeseries[ele]['bed.occupied.icu'];
+  //   reqData.bed_occupied_o2 += timeseries[ele]['bed.occupied.o2'];
+  //   reqData.bed_occupied_ventilator +=
+  //     timeseries[ele]['bed.occupied.ventilator'];
+  // });
+
+  const totalRecord = Object.keys(timeseries).length;
+  // console.log(totalRecord);
+  // console.log(pastDates[totalRecord - 1]);
+
+  const currentDateData = timeseries[pastDates[totalRecord - 1]];
   const reqData = {
-    active_ccc1_facilities: 0,
-    active_ccc2_facilities: 0,
-    contact_traced_high_risk: 0,
-    contact_traced_low_risk: 0,
-    containment_zones_active_micro_sealed_buildings: 0,
-    containment_zones_active_slums_chawls: 0,
-    currently_quarantined_home: 0,
-    bed_available_dchc_dch: 0,
-    bed_available_dchc_dch_ccc2: 0,
-    bed_available_icu: 0,
-    bed_available_o2: 0,
-    bed_available_ventilator: 0,
-    bed_occupied_dchc_dch: 0,
-    bed_occupied_dchc_dch_ccc2: 0,
-    bed_occupied_icu: 0,
-    bed_occupied_o2: 0,
-    bed_occupied_ventilator: 0,
+    contact_traced_high_risk: currentDateData['contact.traced.high.risk'],
+    contact_traced_low_risk: currentDateData['contact.traced.low.risk'],
+    currently_quarantined_home: currentDateData['currently.quarantined.home'],
+    bed_available_dchc_dch_ccc2: currentDateData['bed.available.dchc.dch.ccc2'],
+    bed_available_icu: currentDateData['bed.available.icu'],
+    bed_available_o2: currentDateData['bed.available.o2'],
+    bed_available_ventilator: currentDateData['bed.available.ventilator'],
+    bed_occupied_dchc_dch_ccc2: currentDateData['bed.occupied.dchc.dch.ccc2'],
+    bed_occupied_icu: currentDateData['bed.occupied.icu'],
+    bed_occupied_o2: currentDateData['bed.occupied.o2'],
+    bed_occupied_ventilator: currentDateData['bed.occupied.ventilator'],
   };
-  for (let i = 0; i < data.length - 1; ++i) {
-    reqData.active_ccc1_facilities += data[i]['active.ccc1.facilities'];
-    reqData.active_ccc2_facilities += data[i]['active.ccc2.facilities'];
-    reqData.contact_traced_high_risk += data[i]['contact.traced.high.risk'];
-    reqData.contact_traced_low_risk += data[i]['contact.traced.low.risk'];
-    reqData.containment_zones_active_micro_sealed_buildings +=
-      data[i]['containment.zones.active.micro.sealed.buildings'];
-    reqData.containment_zones_active_slums_chawls +=
-      data[i]['containment.zones.active.slums.chawls'];
-    reqData.currently_quarantined_home += data[i]['currently.quarantined.home'];
-    reqData.bed_available_dchc_dch += data[i]['bed.available.dchc.dch'];
-    reqData.bed_available_dchc_dch_ccc2 +=
-      data[i]['bed.available.dchc.dch.ccc2'];
-    reqData.bed_available_icu += data[i]['bed.available.icu'];
-    reqData.bed_available_o2 += data[i]['bed.available.o2'];
-    reqData.bed_available_ventilator += data[i]['bed.available.ventilator'];
-    reqData.bed_occupied_dchc_dch += data[i]['bed.occupied.dchc.dch'];
-    reqData.bed_occupied_dchc_dch_ccc2 += data[i]['bed.occupied.dchc.dch.ccc2'];
-    reqData.bed_occupied_icu += data[i]['bed.occupied.icu'];
-    reqData.bed_occupied_o2 += data[i]['bed.occupied.o2'];
-    reqData.bed_occupied_ventilator += data[i]['bed.occupied.ventilator'];
+
+  const dates = Object.keys(timeseries);
+
+  function getData(x) {
+    let data = [];
+
+    for (let i = 0; i < dates.length; i++) {
+      const date = dates[i];
+      const d = {
+        data: timeseries[date][x],
+      };
+      data.push(d);
+    }
+
+    return data;
+  }
+
+  function numberWithCommas(x) {
+    if (x || x == 0) {
+      x = x.toString();
+      var lastThree = x.substring(x.length - 3);
+      var otherNumbers = x.substring(0, x.length - 3);
+      if (otherNumbers != '') lastThree = ',' + lastThree;
+      var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
+      return res;
+    }
   }
 
   return (
     <>
       {reqData && (
         <>
-          <div className="StateMetaBottom population">
-            <div className="meta-item population">
-              <h3>{t('CCC Facilitiies')}</h3>
-            </div>
-          </div>
-          <div className="StateMetaBottom">
-            <StateMetaCard
-              className="confirmed"
-              title={t('Active CCC1 Facilities')}
-              statistic={reqData.active_ccc1_facilities}
-            />
-            <StateMetaCard
-              className="confirmed"
-              title={t('Active CCC2 Facilities')}
-              statistic={reqData.active_ccc2_facilities}
-            />
-          </div>
           <div className="StateMetaBottom population">
             <div className="meta-item population">
               <h3>{t('Contact Tracing')}</h3>
@@ -128,33 +114,19 @@ function StateMetaBottom({stateCode, data, timeseries}) {
             <StateMetaCard
               className="confirmed"
               title={t('Contact Traced High Risk')}
-              statistic={reqData.contact_traced_high_risk}
+              statistic={numberWithCommas(reqData.contact_traced_high_risk)}
+              isMumbai={true}
+              data={getData('contact.traced.high.risk')}
             />
             <StateMetaCard
               className="confirmed"
               title={t('Contact Traced Low Risk')}
-              statistic={reqData.contact_traced_low_risk}
+              statistic={numberWithCommas(reqData.contact_traced_low_risk)}
+              isMumbai={true}
+              data={getData('contact.traced.low.risk')}
             />
           </div>
-          <div className="StateMetaBottom population">
-            <div className="meta-item population">
-              <h3>{t('Containment Measures')}</h3>
-            </div>
-          </div>
-          <div className="StateMetaBottom">
-            <StateMetaCard
-              className="confirmed"
-              title={t('Containment Zones Active Micro Sealed Buildings')}
-              statistic={
-                reqData.containment_zones_active_micro_sealed_buildings
-              }
-            />
-            <StateMetaCard
-              className="confirmed"
-              title={t('Containment Zones Active Slums Chawls')}
-              statistic={reqData.containment_zones_active_slums_chawls}
-            />
-          </div>
+
           <div className="StateMetaBottom population">
             <div className="meta-item population">
               <h3>{t('Quarantine Stats')}</h3>
@@ -164,7 +136,9 @@ function StateMetaBottom({stateCode, data, timeseries}) {
             <StateMetaCard
               className="confirmed"
               title={t('Currently Quarantined Home')}
-              statistic={reqData.currently_quarantined_home}
+              statistic={numberWithCommas(reqData.currently_quarantined_home)}
+              isMumbai={true}
+              data={getData('currently.quarantined.home')}
             />
           </div>
           <div className="StateMetaBottom population">
@@ -175,53 +149,60 @@ function StateMetaBottom({stateCode, data, timeseries}) {
           <div className="StateMetaBottom">
             <StateMetaCard
               className="confirmed"
-              title={t('Bed Available DCHC DCH')}
-              statistic={reqData.bed_available_dchc_dch}
-            />
-            <StateMetaCard
-              className="confirmed"
               title={t('Bed Available DCHC DCH CCC2')}
-              statistic={reqData.bed_available_dchc_dch_ccc2}
+              statistic={numberWithCommas(reqData.bed_available_dchc_dch_ccc2)}
+              isMumbai={true}
+              data={getData('bed.available.dchc.dch.ccc2')}
             />
             <StateMetaCard
               className="confirmed"
               title={t('Bed Available ICU')}
-              statistic={reqData.bed_available_icu}
+              statistic={numberWithCommas(reqData.bed_available_icu)}
+              isMumbai={true}
+              data={getData('bed.available.icu')}
             />
             <StateMetaCard
               className="confirmed"
               title={t('Bed Available O2')}
-              statistic={reqData.bed_available_o2}
+              statistic={numberWithCommas(reqData.bed_available_o2)}
+              isMumbai={true}
+              data={getData('bed.available.o2')}
             />
             <StateMetaCard
               className="confirmed"
               title={t('Bed Available Ventilator')}
-              statistic={reqData.bed_available_ventilator}
+              statistic={numberWithCommas(reqData.bed_available_ventilator)}
+              isMumbai={true}
+              data={getData('bed.available.ventilator')}
             />
-            <StateMetaCard
-              className="confirmed"
-              title={t('Bed Occupied DCHC DCH')}
-              statistic={reqData.bed_occupied_dchc_dch}
-            />
+
             <StateMetaCard
               className="confirmed"
               title={t('Bed Occupied DCHC DCH CCC2')}
-              statistic={reqData.bed_occupied_dchc_dch_ccc2}
+              statistic={numberWithCommas(reqData.bed_occupied_dchc_dch_ccc2)}
+              isMumbai={true}
+              data={getData('bed.occupied.dchc.dch.ccc2')}
             />
             <StateMetaCard
               className="confirmed"
               title={t('Bed Occupied ICU')}
-              statistic={reqData.bed_occupied_icu}
+              statistic={numberWithCommas(reqData.bed_occupied_icu)}
+              isMumbai={true}
+              data={getData('bed.occupied.icu')}
             />
             <StateMetaCard
               className="confirmed"
               title={t('Bed Occupied O2')}
-              statistic={reqData.bed_occupied_o2}
+              statistic={numberWithCommas(reqData.bed_occupied_o2)}
+              isMumbai={true}
+              data={getData('bed.occupied.o2')}
             />
             <StateMetaCard
               className="confirmed"
               title={t('Bed Occupied Ventilator')}
-              statistic={reqData.bed_occupied_ventilator}
+              statistic={numberWithCommas(reqData.bed_occupied_ventilator)}
+              isMumbai={true}
+              data={getData('bed.occupied.ventilator')}
             />
           </div>
         </>

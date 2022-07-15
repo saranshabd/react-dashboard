@@ -57,11 +57,11 @@ function Navbar({pages, showLanguageSwitcher, setShowLanguageSwitcher}) {
         {locales[currentLanguage]}
       </div>
 
-       <div className="navbar-middle">
-{/*         <Link to="/" onClick={setExpand.bind(this, false)}>
+      <div className="navbar-middle">
+        {/*         <Link to="/" onClick={setExpand.bind(this, false)}>
           Covid19<span>India</span>
          </Link>*/}
-       </div>
+      </div>
 
       <div
         className="navbar-right"
@@ -86,11 +86,11 @@ function Navbar({pages, showLanguageSwitcher, setShowLanguageSwitcher}) {
                 <Users {...activeNavIcon('/volunteers')} />
               </span>
             </Link>
-            <Link to="/about">
+            <a className="mumbai-btn-container" href="http://thinkief.org/">
               <span>
-                <HelpCircle {...activeNavIcon('/about')} />
+                <HelpCircle />
               </span>
-            </Link>
+            </a>
             <span>
               <SunMoon {...{darkMode}} />
             </span>
@@ -122,21 +122,30 @@ function Expand({pages, setExpand, darkMode, windowSize}) {
     <div className="expand" ref={expandElement} onMouseLeave={handleMouseLeave}>
       {pages.map((page, i) => {
         if (page.showInNavbar === true) {
-          return (
-            <Link
-              to={page.pageLink}
-              key={i}
-              {...(windowSize.width < 769 && {
-                onClick: setExpand.bind(this, false),
-              })}
-            >
-              <span
-                {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}
+          if (page.displayName != 'About') {
+            return (
+              <Link
+                to={page.pageLink}
+                key={i}
+                {...(windowSize.width < 769 && {
+                  onClick: setExpand.bind(this, false),
+                })}
               >
-                {t(page.displayName)}
-              </span>
-            </Link>
-          );
+                <span
+                  {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}
+                >
+                  {t(page.displayName)}
+                </span>
+              </Link>
+            );
+          } else if (page.displayName == 'About') {
+            return (
+              <a href="http://thinkief.org/">
+                {' '}
+                <span>{t(page.displayName)}</span>
+              </a>
+            );
+          }
         }
         return null;
       })}
